@@ -1,0 +1,123 @@
+---
+const MAZMO = "https://mazmo.net/@ClubVanta";
+const TELEGRAM = "https://t.me/+0H-a1v8KRDYzMDMx";
+const CONTACTS = ["vananitadolc4", "ashrrou"];
+---
+
+<footer class="foot">
+  <div class="rail" aria-hidden="true">
+    <span class="gothic">VANTA</span>
+  </div>
+  <div class="cols">
+    <div>
+      <b class="cond">mazmo</b>
+      <a href={MAZMO}>@ClubVanta</a>
+      <br />
+      <span>preguntas por privado</span>
+    </div>
+    <div>
+      <b class="cond">Telegram</b>
+      <a href={TELEGRAM}>canal de difusión</a>
+      <br />
+      <span>
+        {CONTACTS.map((user, i) => (
+          <>
+            {i > 0 && " · "}
+            <a href={`https://t.me/${user}`}>@{user}</a>
+          </>
+        ))}
+      </span>
+    </div>
+    <div>
+      <b class="cond">Reglas</b>
+      <a href="/reglas">club-vanta.com/reglas</a>
+      <br />
+      <span>versión 0.2 · leerlas es obligatorio</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .foot {
+    display: grid;
+    grid-template-columns: var(--rail) minmax(0, 1fr);
+  }
+
+  .rail {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--red);
+    color: var(--ink);
+  }
+
+  .rail span {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 96px;
+    line-height: 0.8;
+  }
+
+  .cols {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 30px;
+    padding: 50px 40px;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  b {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 30px;
+    line-height: 1;
+  }
+
+  .cols span {
+    color: var(--mute);
+  }
+
+  a {
+    color: var(--paper);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .cols span a {
+    color: var(--mute);
+  }
+
+  @media (max-width: 899.98px) {
+    .foot {
+      display: block;
+    }
+
+    .rail {
+      display: block;
+      height: 96px;
+      overflow: hidden;
+      padding-top: 14px;
+      text-align: center;
+    }
+
+    .rail span {
+      writing-mode: horizontal-tb;
+      transform: none;
+      font-size: 110px;
+      line-height: 0.78;
+    }
+
+    .cols {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 22px;
+      padding: 28px var(--space-16) 40px;
+      line-height: 1.6;
+    }
+
+    b {
+      margin-bottom: 6px;
+      font-size: 28px;
+    }
+  }
+</style>

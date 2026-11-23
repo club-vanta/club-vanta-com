@@ -91,3 +91,13 @@ Registro de lo que se decidió para club-vanta.com, en orden. Cada entrada dice 
 
 - **En mobile, la línea roja "jueves · 20.30 · gratis" va a 19 px y no a 14 px como en el mock.** A 14 px, el rojo sobre papel da 3,18:1 y no pasa WCAG AA para texto chico (axe lo marca como `serious`). A 19 px en negrita cuenta como texto grande (alcanza con 3:1), así que el acento rojo del mock se mantiene.
 - **Los tiles del muro del hero son todos 3:4**, en lugar de alternar las proporciones del mock (423:655 y 360:480). Las portadas reales de mazmo miden unos 303x404 (3:4); forzarlas a otra proporción recortaría los costados del flyer.
+
+### Resto de la home (Task 6)
+
+- **Perfil de mazmo:** el pie linkea a `https://mazmo.net/@ClubVanta`. Se probó abriéndolo: `mazmo.net/@ClubVanta` muestra el perfil y `mazmo.net/ClubVanta` da "Página no encontrada".
+- **Rojo sobre papel en el carnet.** El rojo sobre papel no llega a 4,5:1, así que el texto chico en rojo no pasa WCAG AA (axe lo marca como `serious`). En escritorio, "PARA VENIR AL ALTER" y el link a `/reglas` van a 19 px en negrita (texto grande, alcanza con 3:1) en lugar de 14 y 16 px. En mobile no hay lugar para agrandarlos dentro del carnet: van en negro, y el link conserva el rojo en el subrayado.
+- **Links del pie subrayados**, todos, y no solo el de reglas como en el mock: los contactos de Telegram van en gris y sin subrayado no se distinguen del texto.
+- **Carnet entre 900 y 1100 px:** el título y el carnet no entran lado a lado, así que el carnet baja debajo del título (hasta 640 px de ancho). Alters pasados pasa de 5 a 4 columnas en ese tramo.
+- **Cinta:** si hay pocos nombres, la lista se repite hasta tener al menos 8 y un número par, para que el loop `translateX(-50%)` no deje hueco ni cambie de color al reiniciar. Es `aria-hidden`; el título accesible de la sección es un `h2` oculto "Alters pasados".
+- **"← deslizá para ver más"** del mock mobile va debajo del carrusel solo en pantallas de menos de 600 px y con 3 alters o más; el resto de esa línea del mock era una nota para el diseño.
+- Sin portada, el tile muestra el nombre corto sobre `--ink-2` con un borde `--line`, en la misma proporción 3:4.

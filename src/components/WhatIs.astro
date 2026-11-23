@@ -1,0 +1,65 @@
+<section id="que-es" class="what">
+  <h2 class="cond">
+    <span>Un bar.</span>
+    <span>Un jueves.</span>
+    <span>Gente charlando.</span>
+  </h2>
+  <p>
+    Nos juntamos a las 20.30 en un bar de San Telmo. Es gratis y es un espacio
+    público: no se permiten prácticas.
+  </p>
+</section>
+
+<style>
+  .what {
+    padding: 80px 40px 80px var(--content-start);
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  h2 {
+    margin: 0;
+    font-size: clamp(88px, 9.4vw, 120px);
+    line-height: 0.82;
+  }
+
+  h2 span {
+    display: block;
+  }
+
+  h2 span:nth-child(2) {
+    padding-left: 1.2em;
+  }
+
+  h2 span:nth-child(3) {
+    color: var(--red);
+  }
+
+  p {
+    max-width: 52ch;
+    margin: 28px 0 0;
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 899.98px) {
+    .what {
+      padding: var(--space-48) var(--space-16);
+    }
+
+    h2 {
+      font-size: 62px;
+      line-height: 0.84;
+    }
+
+    h2 span:nth-child(2) {
+      padding-left: 0;
+    }
+
+    p {
+      margin-top: 20px;
+      font-size: 16px;
+      line-height: 1.45;
+    }
+  }
+</style>

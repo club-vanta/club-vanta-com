@@ -4,7 +4,12 @@ import Base from "../layouts/Base.astro";
 import Hero from "../components/Hero.astro";
 import NextAlter from "../components/NextAlter.astro";
 import StickyNext from "../components/StickyNext.astro";
-import { selectAlters } from "../lib/alters";
+import WhatIs from "../components/WhatIs.astro";
+import Carnet from "../components/Carnet.astro";
+import Tape from "../components/Tape.astro";
+import PastAlters from "../components/PastAlters.astro";
+import Footer from "../components/Footer.astro";
+import { selectAlters, tapeNames } from "../lib/alters";
 import { getAlters } from "../lib/get-alters";
 import { cacheSnapshotStore } from "../lib/snapshot-cache";
 
@@ -36,6 +41,15 @@ Astro.response.headers.set("Cache-Control", "public, max-age=60");
   <main>
     <Hero covers={covers} />
     <NextAlter next={next} last={past[0] ?? null} />
+    <WhatIs />
+    <Carnet />
+    {past.length > 0 && (
+      <>
+        <Tape names={tapeNames(alters)} />
+        <PastAlters past={past} />
+      </>
+    )}
   </main>
+  <Footer />
   {next && <StickyNext next={next} />}
 </Base>
