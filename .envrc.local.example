@@ -1,0 +1,16 @@
+# Copiar a .envrc.local (fuera de git) y completar.
+# El .envrc del repo lo carga con source_env_if_exists.
+
+# Cloudflare: token account-owned "club-vanta-com".
+# Permisos y cómo crearlo: infra/README.md.
+# Account ID: dashboard de Cloudflare, inicio de la cuenta, o la URL dash.cloudflare.com/<account id>/.
+export CLOUDFLARE_API_TOKEN=""
+export CLOUDFLARE_ACCOUNT_ID=""
+
+# OpenTofu lee las variables de infra/variables.tf con el prefijo TF_VAR_.
+export TF_VAR_cloudflare_api_token="$CLOUDFLARE_API_TOKEN"
+export TF_VAR_cloudflare_account_id="$CLOUDFLARE_ACCOUNT_ID"
+
+# Estado de OpenTofu en S3 (bucket alter-tracker-terraform-state, us-east-1).
+# Perfil de ~/.aws/credentials con acceso a ese bucket.
+export AWS_PROFILE="base"

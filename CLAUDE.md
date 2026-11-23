@@ -11,6 +11,8 @@ Everything we decide, build, or learn that gives context goes into this file or 
 - `docs/reglas-v0.2.md`: the rules document, transcribed from the source PDF.
 - `docs/heredado-de-velvet.md`: setup, tooling, CI and practices taken from `../velvet`, and what does not apply.
 - `docs/superpowers/specs/2026-11-23-club-vanta-web-design.md`: the approved design.
+- `docs/superpowers/plans/2026-11-23-backend-endpoint-publico.md`: plan for the public alters endpoint, executed in `../alter-tracker-backend`. Runs first.
+- `docs/superpowers/plans/2026-11-23-sitio.md`: plan for the site and its infra in this repo.
 
 When a conversation settles something, update the matching file in the same turn.
 

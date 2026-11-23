@@ -70,3 +70,13 @@ Registro de lo que se decidió para club-vanta.com, en orden. Cada entrada dice 
 ### Herramientas
 
 - Grupo de plugins frontend activado en `.claude/settings.json` (frontend-design, a11y-audit, pw, apple-hig-expert, demo-video).
+
+### Plan de implementación
+
+- Dos planes, uno por repo: `docs/superpowers/plans/2026-11-23-backend-endpoint-publico.md` (se ejecuta en `../alter-tracker-backend`) y `docs/superpowers/plans/2026-11-23-sitio.md` (este repo). El backend va primero: el sitio genera sus tipos del `openapi.json`.
+- **El endpoint público solo publica a Club Vanta.** Pedido del usuario: ninguna otra organización del backend lo tiene habilitado. Por eso la ruta es `GET /public/alters`, sin organización en la URL, y la organización sale del setting `PUBLIC_ALTERS_ORG_SLUG`. Sin el setting, 404. Descartado: `/public/organizations/{slug}/alters`, que dejaba pedir cualquier organización.
+- **Lista plana en vez de `next` / `past`.** El sitio elige el próximo (margen de 12 horas después de la fecha). Motivo: si el backend falla, el sitio usa la última copia en caché y tiene que recalcular con la hora actual para no mostrar una fecha vieja como próxima.
+- **Workers, no Pages.** El adapter de Astro 6 (`@astrojs/cloudflare` v13) apunta a Workers. OpenTofu declara el Worker (`cloudflare_worker`) y los dominios `club-vanta.com` y `www.club-vanta.com` (`cloudflare_workers_custom_domain`). El código lo sube `wrangler deploy` desde GitHub Actions en cada push a `main`: es código versionado, no configuración a mano en la UI. `www` redirige al apex desde el middleware de Astro.
+- **Portadas por hotlink** a `prod.mazmocdn.com`, con `referrerpolicy="no-referrer"`, en blanco y negro con CSS.
+- **Fecha bajo cada alter pasado:** el mock muestra "abr · máscaras y antifaces", pero el backend no tiene un subtítulo por alter. Va mes y año ("abr 2026").
+- **E2E con Playwright** (grupo `pw` ya activo) contra `astro preview` (workerd) y un backend falso en Node. Sin el job `smoke` contra el backend real de Velvet: sobra para un solo endpoint de lectura.

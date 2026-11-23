@@ -101,24 +101,25 @@ Diseñado a 375 px. El público llega desde mazmo, casi siempre desde el celular
 **Backend (`../alter-tracker-backend`)**, cambios:
 
 - Guardar la portada del evento al crear el meetup (y al sincronizar con mazmo): columna nueva en `meetups`, tomada de `event.cover` de la misma respuesta que hoy da la fecha (`MazmoClient.fetch_meetup_date` lee `api.mazmo.net/communities/<comunidad>/threads/<thread>`). Hace falta migración Alembic y completar las portadas de los meetups existentes.
-- Endpoint público nuevo, sin auth, de solo lectura, que devuelve los alters de **una sola organización** (Club Vanta; el backend es multi-organización). Forma propuesta:
+- Endpoint público nuevo, sin auth, de solo lectura: `GET /public/alters`. **Solo publica a Club Vanta** (el backend es multi-organización): la URL no recibe organización, y la única publicada sale del setting `PUBLIC_ALTERS_ORG_SLUG` del backend. Sin el setting, el endpoint responde 404. Forma:
 
   ```json
   {
-    "next": { "short_name": "Discreet", "title": "Alter San Telmo - D I S C R E E T",
-              "date": "2026-11-19T23:30:00Z", "mazmo_url": "https://mazmo.net/...",
-              "cover_url": "https://prod.mazmocdn.com/events/covers/....jpeg",
-              "excerpt": "Recuperamos las raíces..." } ,
-    "past": [ { "short_name": "...", "date": "...", "mazmo_url": "...", "cover_url": "..." } ]
+    "alters": [
+      { "short_name": "Discreet", "title": "Alter San Telmo - D I S C R E E T",
+        "date": "2026-11-19T23:30:00Z", "mazmo_url": "https://mazmo.net/...",
+        "cover_url": "https://prod.mazmocdn.com/events/covers/....jpeg",
+        "excerpt": "Recuperaremos las raíces..." }
+    ]
   }
   ```
 
-  `next` es `null` cuando no hay alter futuro. "Futuro" se decide con la fecha del alter más un margen (el alter dura la noche: no desaparece a las 20.31).
+  Lista plana, de la fecha más nueva a la más vieja; `cover_url` y `excerpt` pueden ser `null`. **El sitio** decide cuál es el próximo: el más cercano cuya fecha más un margen de 12 horas todavía no pasó (el alter dura la noche: no desaparece a las 20.31). Se decide en el sitio y no en el backend porque el sitio puede estar usando una copia en caché (ver "Sitio") y tiene que recalcular con la hora actual.
 - **Nunca** devuelve `location_label`, `latitude`, `longitude`, RSVPs, invitados, pagos ni nada de staff.
 - **Nombre corto derivado del título, automático** (sin campo nuevo). Tiene que resolver al menos: "Alter San Telmo - D I S C R E E T" → "Discreet", "Alter Tan Selmo - Spring Break" → "Spring Break", "Alter Tan Selmo "Secret Face"" → "Secret Face", "Alter a la Vuelta - San Telmo" y "Alter a la Vuelta, San Telmo." → un nombre razonable (por ejemplo "A la Vuelta"). La regla vive en el backend, con tests sobre los títulos reales.
 - Seguir las convenciones de `../alter-tracker-backend/CLAUDE.md` (routers, schemas, services; tipos de la API regenerados).
 
-**Sitio:** la home pide ese endpoint al renderizar, con caché de unos 15 minutos en Cloudflare. Si el backend falla o tarda, la home se muestra igual en el estado "sin fecha" y sin archivo, nunca con error.
+**Sitio:** la home pide ese endpoint al renderizar, con caché de unos 15 minutos en Cloudflare. El backend está siempre prendido, pero puede fallar un rato (deploy, reinicio). La caché (Cache API de Workers) guarda la última respuesta buena y el sitio la usa si el backend falla o tarda. Solo sin ninguna copia en caché la home se muestra en el estado "sin fecha" y sin archivo. Nunca con error.
 
 ### Infraestructura
 
@@ -130,7 +131,7 @@ Diseñado a 375 px. El público llega desde mazmo, casi siempre desde el celular
 
 - **Estado de OpenTofu:** en el bucket S3 que ya usa el backend (`alter-tracker-terraform-state`), con una key propia (`club-vanta-com.tfstate`) y `use_lockfile = true`. Velvet no declara backend remoto; este repo sí, para no depender de un estado local.
 - **Extracto del próximo alter:** el backend guarda, junto con la portada, el primer párrafo de `event.description` de mazmo (texto plano, sin HTML) y lo devuelve como `excerpt`.
-- **Identificar la organización** en el endpoint por su `slug` en la tabla `organizations` (por ejemplo `/public/organizations/{slug}/alters`). El builder confirma el slug real de Club Vanta en la base.
+- **Organización publicada:** fija por config del backend (`PUBLIC_ALTERS_ORG_SLUG`), no por la URL, para que ninguna otra organización quede expuesta (pedido del usuario). El builder confirma el slug real de Club Vanta en la base.
 - **El apex `club-vanta.com` puede tener registros existentes** (por ejemplo MX de correo; el backend usa `infra-alerts@club-vanta.com`). Antes de crear registros en el apex, el builder lista lo que hay y no pisa nada que no sea web.
 - **Contenido fijo** (textos, links de Telegram y mazmo, contactos de la organización) vive en el código del sitio, no en el backend.
 
