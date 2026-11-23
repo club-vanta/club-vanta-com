@@ -22,6 +22,7 @@ export const NEXT = {
   cover: "full",
   excerpt:
     "Recuperaremos las raíces, un Alter para venir a charlar, ser buena gente y no andar juzgando.",
+  extra: { location_label: "Chile 1234", latitude: -34.6, longitude: -58.37 },
 };
 
 // Newest first, as the backend returns them.
@@ -60,7 +61,10 @@ export const PAST = [
   },
 ];
 
-function toAlter({ short_name, title, mazmo_url, cover: name, excerpt }, date) {
+function toAlter(
+  { short_name, title, mazmo_url, cover: name, excerpt, extra },
+  date,
+) {
   return {
     short_name,
     title,
@@ -68,6 +72,9 @@ function toAlter({ short_name, title, mazmo_url, cover: name, excerpt }, date) {
     mazmo_url,
     cover_url: name ? cover(name) : null,
     excerpt: excerpt ?? null,
+    // Private fields the backend must never expose. The site has to drop
+    // them; the privacy e2e test fails if any reaches the HTML.
+    ...(extra ?? {}),
   };
 }
 

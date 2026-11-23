@@ -162,6 +162,100 @@ describe("getAlters", () => {
     expect(await getAlters(deps)).toEqual({ alters: [], source: "none" });
   });
 
+  describe("public fields only", () => {
+    const leaky = {
+      ...alter(1),
+      location_label: "Chile 1234",
+      latitude: -34.6,
+      longitude: -58.37,
+    };
+
+    it("drops unknown fields from the result and the stored snapshot", async () => {
+      const store = memoryStore(null);
+      const { deps } = makeDeps(store, async () =>
+        jsonResponse({ alters: [leaky] }),
+      );
+      const result = await getAlters(deps);
+      expect(result.alters).toEqual([alter(1)]);
+      expect(JSON.stringify(result)).not.toMatch(/location|latitude|Chile/);
+      expect(JSON.stringify(store.current())).not.toMatch(
+        /location|latitude|longitude|Chile/,
+      );
+    });
+
+    it("drops unknown fields from a cached snapshot", async () => {
+      const store = memoryStore(
+        snapshotAt(60, [leaky as unknown as PublicAlter]),
+      );
+      const { deps } = makeDeps(store, async () =>
+        jsonResponse({ alters: [] }),
+      );
+      const result = await getAlters(deps);
+      expect(result).toEqual({ alters: [alter(1)], source: "fresh-cache" });
+    });
+
+    it("rejects a mazmo_url that is not https", async () => {
+      const stale = snapshotAt(5000, [alter(1)]);
+      const store = memoryStore(stale);
+      const { deps } = makeDeps(store, async () =>
+        jsonResponse({
+          alters: [alter(2, { mazmo_url: "http://mazmo.net/e/2" })],
+        }),
+      );
+      expect(await getAlters(deps)).toEqual({
+        alters: stale.alters,
+        source: "stale-cache",
+      });
+    });
+
+    it("turns a cover that is not https into null", async () => {
+      const store = memoryStore(null);
+      const { deps } = makeDeps(store, async () =>
+        jsonResponse({
+          alters: [alter(1, { cover_url: "http://cdn.example.test/c.png" })],
+        }),
+      );
+      const result = await getAlters(deps);
+      expect(result.alters[0].cover_url).toBeNull();
+    });
+
+    it("keeps an https cover", async () => {
+      const cover = "https://cdn.example.test/c.png";
+      const { deps } = makeDeps(memoryStore(null), async () =>
+        jsonResponse({ alters: [alter(1, { cover_url: cover })] }),
+      );
+      expect((await getAlters(deps)).alters[0].cover_url).toBe(cover);
+    });
+
+    it("allows a local http cover only when the API is local", async () => {
+      const cover = "http://127.0.0.1:4599/covers/full.png";
+      const respond = async () =>
+        jsonResponse({ alters: [alter(1, { cover_url: cover })] });
+      const local = makeDeps(memoryStore(null), respond, {
+        apiUrl: "http://127.0.0.1:4599",
+      });
+      expect((await getAlters(local.deps)).alters[0].cover_url).toBe(cover);
+      const remote = makeDeps(memoryStore(null), respond);
+      expect((await getAlters(remote.deps)).alters[0].cover_url).toBeNull();
+    });
+
+    it("ignores a malformed cached snapshot", async () => {
+      const bad = {
+        fetchedAt: new Date(NOW.getTime() - 60_000).toISOString(),
+        alters: [{ short_name: "x" }],
+      } as unknown as Snapshot;
+      const fresh = [alter(2)];
+      const { deps, calls } = makeDeps(memoryStore(bad), async () =>
+        jsonResponse({ alters: fresh }),
+      );
+      expect(await getAlters(deps)).toEqual({
+        alters: fresh,
+        source: "backend",
+      });
+      expect(calls).toHaveLength(1);
+    });
+  });
+
   const invalid: [string, () => Response][] = [
     [
       "html content",

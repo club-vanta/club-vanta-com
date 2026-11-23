@@ -13,8 +13,6 @@ import { selectAlters, tapeNames } from "../lib/alters";
 import { getAlters } from "../lib/get-alters";
 import { cacheSnapshotStore } from "../lib/snapshot-cache";
 
-export const prerender = false;
-
 const now = new Date();
 const { alters } = await getAlters({
   fetchImpl: fetch,

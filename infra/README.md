@@ -67,9 +67,12 @@ Orden pensado para no pelearse con Wrangler: OpenTofu crea el Worker vacío prim
 1. **Secrets de GitHub, antes del primer push a `main`.** El repo es `club-vanta/club-vanta-com`. El `gh` de esta máquina elige la cuenta según el dueño del repo, así que pasá siempre `-R`. Los valores salen de `.envrc.local`, sin pegarlos en ningún lado:
 
    ```bash
-   gh secret set CLOUDFLARE_API_TOKEN --body "$CLOUDFLARE_API_TOKEN" -R club-vanta/club-vanta-com
-   gh secret set CLOUDFLARE_ACCOUNT_ID --body "$CLOUDFLARE_ACCOUNT_ID" -R club-vanta/club-vanta-com
+   direnv exec . bash -c 'test -n "$CLOUDFLARE_API_TOKEN" && test -n "$CLOUDFLARE_ACCOUNT_ID"'
+   direnv exec . bash -c 'gh secret set CLOUDFLARE_API_TOKEN --body "$CLOUDFLARE_API_TOKEN" -R club-vanta/club-vanta-com'
+   direnv exec . bash -c 'gh secret set CLOUDFLARE_ACCOUNT_ID --body "$CLOUDFLARE_ACCOUNT_ID" -R club-vanta/club-vanta-com'
    ```
+
+   La primera línea falla si alguna variable está vacía; no sigas si falla, porque `gh secret set` con una variable vacía guarda un secret vacío.
 
 2. **Crear el Worker vacío bajo OpenTofu:**
 
@@ -80,7 +83,7 @@ Orden pensado para no pelearse con Wrangler: OpenTofu crea el Worker vacío prim
 3. **Subir el código a ese mismo Worker:**
 
    ```bash
-   direnv exec . bash -c 'npm ci && npm run build && npx wrangler deploy'
+   direnv exec . bash -c 'npm ci && npm run deploy'
    ```
 
 4. **Crear los dos dominios:**
@@ -110,10 +113,12 @@ Orden pensado para no pelearse con Wrangler: OpenTofu crea el Worker vacío prim
 6. **Verificar en producción:**
 
    ```bash
-   curl -sI https://www.club-vanta.com/reglas   # 301 a https://club-vanta.com/reglas
-   curl -sI https://club-vanta.com/             # 200, con el próximo alter o "Todavía no hay fecha"
-   curl -sI https://club-vanta.com/reglas       # 200
+   curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' https://www.club-vanta.com/reglas   # 301 https://club-vanta.com/reglas
+   curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' https://club-vanta.com/             # 200, con el próximo alter o "Todavía no hay fecha"
+   curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' https://club-vanta.com/reglas       # 200
    ```
+
+   Los assets estáticos (`/robots.txt`, `/_astro/*`) responden 200 también en `www`: es a propósito, solo las páginas HTML redirigen.
 
 Desde acá, cada push a `main` con CI en verde despliega solo.
 
@@ -129,7 +134,7 @@ El `<worker_id>` es el `id` del Worker, que puede no ser igual al nombre. Buscal
 
 ## Rollback
 
-- **Código malo en producción.** Volvé a la versión anterior con `npx wrangler rollback` (con las credenciales cargadas), o redesplegá un SHA anterior: `git checkout <sha> && npm ci && npm run build && npx wrangler deploy`. Para que un push posterior no lo pise, revertí el commit en `main`.
+- **Código malo en producción.** Volvé a la versión anterior con `npx wrangler rollback` (con las credenciales cargadas), o redesplegá un SHA anterior: `git checkout <sha> && npm ci && npm run deploy`. Para que un push posterior no lo pise, revertí el commit en `main`.
 - **Sacar el sitio del aire.** Desatá los dos dominios sin tocar el Worker:
 
   ```bash

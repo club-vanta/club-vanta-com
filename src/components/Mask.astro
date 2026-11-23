@@ -9,7 +9,9 @@ const { coverUrl, muted } = Astro.props;
 
 {coverUrl ? (
   <div class:list={["mask", { muted }]} aria-hidden="true">
+    <img class="fallback" src="/vanta.svg" alt="" />
     <img
+      class="cover"
       src={coverUrl}
       alt=""
       referrerpolicy="no-referrer"
@@ -49,6 +51,23 @@ const { coverUrl, muted } = Astro.props;
     max-width: none;
     object-fit: cover;
     object-position: 50% 0;
+  }
+
+  /* The logo sits behind the cover. If the cover fails, the error script
+     removes it and the mask falls back to the same look as having no cover. */
+  .mask .fallback {
+    position: absolute;
+    inset: 0;
+    object-fit: contain;
+  }
+
+  .mask .cover {
+    position: relative;
+  }
+
+  .mask:not(:has(.cover)) {
+    -webkit-mask-image: none;
+    mask-image: none;
   }
 
   .muted img {

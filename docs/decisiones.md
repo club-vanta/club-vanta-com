@@ -17,7 +17,7 @@ Registro de lo que se decidió para club-vanta.com, en orden. Cada entrada dice 
 ### Privacidad
 
 - No se muestran nombres, perfiles ni fotos de asistentes. Motivo: las reglas prohíben el doxeo y las fotos, y existe una lista discreta.
-- Los buscadores pueden indexar el sitio (decidido en Task 9, ver "Cierre"). El sitio no muestra datos de personas.
+- Los buscadores pueden indexar el sitio (decidido el 2026-11-23, ver "Cierre"). El sitio no muestra datos de personas.
 
 ### Dirección de diseño
 
@@ -81,18 +81,18 @@ Registro de lo que se decidió para club-vanta.com, en orden. Cada entrada dice 
 - **Fecha bajo cada alter pasado:** el mock muestra "abr · máscaras y antifaces", pero el backend no tiene un subtítulo por alter. Va mes y año ("abr 2026").
 - **E2E con Playwright** (grupo `pw` ya activo) contra `astro preview` (workerd) y un backend falso en Node. Sin el job `smoke` contra el backend real de Velvet: sobra para un solo endpoint de lectura.
 
-### Logo y tokens (Task 2)
+### Logo y tokens
 
 - **Logo vectorizado con potrace** desde `docs/mocks/vanta.jpg` (umbral 50 % sobre el doble de tamaño, `--turdsize 20`). Comparado lado a lado con el JPG: la V, la corona y el triángulo coinciden. `public/vanta.svg` y `public/vanta-mask.svg` son la silueta blanca sobre transparente (la máscara usa el canal alfa, no `mask-mode: luminance`); `public/favicon.svg` es el mismo trazo en rojo sobre negro.
 - **Tokens que el mock usa y el plan no listaba:** `--white` (título del hero con `mix-blend-mode: difference`), `--line` (`#2a2a2a`, bordes de la cinta) y `--mute-ink` (`#555555`, texto chico del carnet). Las sombras también son tokens (`--shadow-diag`, `--shadow-carnet`).
 - **Filtro anti look de IA:** `tests/anti-ai-look.test.ts` recorre `src/**/*.{astro,css,ts}` (sin `src/api/types.ts`). Los colores solo se permiten en `src/styles/tokens.css`.
 
-### Hero y próximo alter (Task 5)
+### Hero y próximo alter
 
 - **En mobile, la línea roja "jueves · 20.30 · gratis" va a 19 px y no a 14 px como en el mock.** A 14 px, el rojo sobre papel da 3,18:1 y no pasa WCAG AA para texto chico (axe lo marca como `serious`). A 19 px en negrita cuenta como texto grande (alcanza con 3:1), así que el acento rojo del mock se mantiene.
 - **Los tiles del muro del hero son todos 3:4**, en lugar de alternar las proporciones del mock (423:655 y 360:480). Las portadas reales de mazmo miden unos 303x404 (3:4); forzarlas a otra proporción recortaría los costados del flyer.
 
-### Resto de la home (Task 6)
+### Resto de la home
 
 - **Perfil de mazmo:** el pie linkea a `https://mazmo.net/@ClubVanta`. Se probó abriéndolo: `mazmo.net/@ClubVanta` muestra el perfil y `mazmo.net/ClubVanta` da "Página no encontrada".
 - **Rojo sobre papel en el carnet.** El rojo sobre papel no llega a 4,5:1, así que el texto chico en rojo no pasa WCAG AA (axe lo marca como `serious`). En escritorio, "PARA VENIR AL ALTER" y el link a `/reglas` van a 19 px en negrita (texto grande, alcanza con 3:1) en lugar de 14 y 16 px. En mobile no hay lugar para agrandarlos dentro del carnet: van en negro, y el link conserva el rojo en el subrayado.
@@ -102,7 +102,7 @@ Registro de lo que se decidió para club-vanta.com, en orden. Cada entrada dice 
 - **"← deslizá para ver más"** del mock mobile va debajo del carrusel solo en pantallas de menos de 600 px y con 3 alters o más; el resto de esa línea del mock era una nota para el diseño.
 - Sin portada, el tile muestra el nombre corto sobre `--ink-2` con un borde `--line`, en la misma proporción 3:4.
 
-### /reglas (Task 7)
+### /reglas
 
 - **Número de las reglas sin resaltar: `#7a7a7a` y no `#555`.** El gris del mock (`#555`) sobre negro da 2,6:1 y no llega a 3:1 ni siquiera como texto grande (38 px). Se subió a `--num` (`#7a7a7a`, 4,5:1) y se mantiene claramente más apagado que el rojo de las reglas en negrita.
 - **Colores del mock que faltaban como token:** `--ink-3` (`#1a1a1a`, fondo de la penalidad) y `--paper-soft` (`#d8d3c8`, texto corriente). Los bordes entre reglas usan `--line` (`#2a2a2a`) en lugar de `#262626`: la diferencia no se ve.
@@ -110,9 +110,16 @@ Registro de lo que se decidió para club-vanta.com, en orden. Cada entrada dice 
 - **El número del bloque ("01") y el título se separan con un espacio** en el HTML (el mock los pegaba); las palabras y el orden son los mismos.
 - **Mobile sin mock propio:** banda "VANTA" horizontal de 110 px arriba, títulos de bloque encima de su lista, números de regla de 32 px.
 
-### Cierre (Task 9)
+### Cierre
 
 - **Buscadores: se permite indexar.** `public/robots.txt` con `User-agent: *` y `Allow: /`. Motivo: el club no es una organización secreta ("somos un club social, no una organización secreta") y el sitio no muestra nombres, conteos ni fotos de asistentes, así que indexarlo no expone a nadie. Se sirve como archivo estático del Worker.
 - **Textos revisados contra el filtro de IA y la voz del club.** Cambios: `<title>` de la home pasa de "Club Vanta" a "Club Vanta · Alters en San Telmo" (dice qué es en la pestaña y en el resultado de búsqueda); la `description` de la home deja de repetir el eslogan y dice los datos (club sin fines de lucro, jueves a las 20.30, San Telmo, gratis); la de `/reglas` tenía "Leelas" sin tilde (voseo: "Leélas") y decía "son pocas", que no es cierto (son 18), y pasa a "Leerlas es obligatorio para entrar".
 - **Foco en la barra fija mobile.** El contorno rojo de `:focus-visible` desaparecía sobre la barra roja: en ese link va en negro. Además `scroll-padding-bottom` en `html` para que la barra no tape el elemento enfocado al tabular.
 - **Se deja como está:** CLS de 0,05 en mobile (cambio de fuente al cargar Google Fonts; el umbral "bueno" es 0,1) y el título "CLUB SOCIAL." con `mix-blend-mode: difference`, que sobre los puntos más claros del muro baja el contraste; es el diseño aprobado del mock y el muro está oscurecido a propósito.
+
+### Ajustes de la revisión final (2026-11-23)
+
+- **`/reglas` se renderiza en el servidor, no prerenderizada** (el diseño decía "prerenderizada"). Motivo: el sitio usa `output: "server"` y así el middleware que redirige `www` a apex también corre sobre `/reglas`. El costo es mínimo: es texto fijo. Los assets estáticos (`robots.txt`, `/_astro/*`) responden 200 también en `www`, porque Workers los sirve antes del middleware.
+- **Sin bindings que no estén en OpenTofu.** El adapter de Cloudflare agrega por defecto un KV `SESSION` (sesiones de Astro) y un binding `IMAGES`. El sitio no usa ninguna de las dos cosas, así que `astro.config.mjs` desactiva ambas (`session` con driver en memoria e `imageService: "passthrough"`), y el CI falla si `wrangler deploy --dry-run` lista un binding que no sea `ASSETS` ni las dos variables.
+- **Privacidad en el límite del backend.** `getAlters` copia solo `short_name`, `title`, `date`, `mazmo_url`, `cover_url` y `excerpt`, y acepta únicamente URLs `https://`. La copia de la caché pasa por el mismo filtro. Las URLs `http://127.0.0.1` y `http://localhost` solo valen si la API configurada es local (el backend falso del e2e).
+- **Portada rota.** El logo queda detrás de la portada: si la portada falla, la máscara se ve igual que sin portada.

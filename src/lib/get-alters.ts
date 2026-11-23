@@ -22,35 +22,83 @@ export interface GetAltersDeps {
 export type AltersSource = "fresh-cache" | "backend" | "stale-cache" | "none";
 
 const isString = (v: unknown): v is string => typeof v === "string";
-const isStringOrNull = (v: unknown): v is string | null =>
-  v === null || isString(v);
 
-function isPublicAlter(v: unknown): v is PublicAlter {
-  if (typeof v !== "object" || v === null) return false;
-  const a = v as Record<string, unknown>;
-  return (
-    isString(a.short_name) &&
-    isString(a.title) &&
-    isString(a.date) &&
-    !Number.isNaN(Date.parse(a.date)) &&
-    isString(a.mazmo_url) &&
-    isStringOrNull(a.cover_url) &&
-    isStringOrNull(a.excerpt)
-  );
+const LOCAL_ORIGIN = /^http:\/\/(127\.0\.0\.1|localhost)(:\d+)?(\/|$)/;
+
+/** True when the configured API itself is a local one (the e2e fake backend). */
+export function isLocalApi(apiUrl: string): boolean {
+  return LOCAL_ORIGIN.test(apiUrl);
 }
 
-function parseAlters(body: unknown): PublicAlter[] | null {
-  if (typeof body !== "object" || body === null) return null;
-  const alters = (body as { alters?: unknown }).alters;
-  if (!Array.isArray(alters) || !alters.every(isPublicAlter)) return null;
+function isSafeUrl(v: unknown, allowInsecureLocal: boolean): v is string {
+  if (!isString(v)) return false;
+  if (v.startsWith("https://")) return true;
+  return allowInsecureLocal && LOCAL_ORIGIN.test(v);
+}
+
+/**
+ * Maps one backend item to exactly the public fields, so nothing else the
+ * backend may send (locations, for example) reaches the cache or the page.
+ */
+function toPublicAlter(
+  v: unknown,
+  allowInsecureLocal: boolean,
+): PublicAlter | null {
+  if (typeof v !== "object" || v === null) return null;
+  const a = v as Record<string, unknown>;
+  if (
+    !isString(a.short_name) ||
+    !isString(a.title) ||
+    !isString(a.date) ||
+    Number.isNaN(Date.parse(a.date)) ||
+    !isSafeUrl(a.mazmo_url, allowInsecureLocal)
+  ) {
+    return null;
+  }
+  if (a.cover_url !== null && !isString(a.cover_url)) return null;
+  if (a.excerpt !== null && !isString(a.excerpt)) return null;
+  return {
+    short_name: a.short_name,
+    title: a.title,
+    date: a.date,
+    mazmo_url: a.mazmo_url,
+    cover_url: isSafeUrl(a.cover_url, allowInsecureLocal) ? a.cover_url : null,
+    excerpt: a.excerpt,
+  };
+}
+
+function parseList(
+  list: unknown,
+  allowInsecureLocal: boolean,
+): PublicAlter[] | null {
+  if (!Array.isArray(list)) return null;
+  const alters: PublicAlter[] = [];
+  for (const item of list) {
+    const alter = toPublicAlter(item, allowInsecureLocal);
+    if (!alter) return null;
+    alters.push(alter);
+  }
   return alters;
 }
 
-async function readSnapshot(store: SnapshotStore): Promise<Snapshot | null> {
+function parseAlters(
+  body: unknown,
+  allowInsecureLocal: boolean,
+): PublicAlter[] | null {
+  if (typeof body !== "object" || body === null) return null;
+  return parseList((body as { alters?: unknown }).alters, allowInsecureLocal);
+}
+
+async function readSnapshot(
+  store: SnapshotStore,
+  allowInsecureLocal: boolean,
+): Promise<Snapshot | null> {
   try {
     const snapshot = await store.get();
-    if (!snapshot || !Array.isArray(snapshot.alters)) return null;
-    return snapshot;
+    if (!snapshot || !isString(snapshot.fetchedAt)) return null;
+    const alters = parseList(snapshot.alters, allowInsecureLocal);
+    if (!alters) return null;
+    return { fetchedAt: snapshot.fetchedAt, alters };
   } catch {
     return null;
   }
@@ -65,7 +113,7 @@ async function fetchAlters(deps: GetAltersDeps): Promise<PublicAlter[] | null> {
       signal: AbortSignal.timeout(deps.timeoutMs),
     });
     if (response.status !== 200) return null;
-    return parseAlters(await response.json());
+    return parseAlters(await response.json(), isLocalApi(deps.apiUrl));
   } catch {
     return null;
   }
@@ -74,7 +122,7 @@ async function fetchAlters(deps: GetAltersDeps): Promise<PublicAlter[] | null> {
 export async function getAlters(
   deps: GetAltersDeps,
 ): Promise<{ alters: PublicAlter[]; source: AltersSource }> {
-  const cached = await readSnapshot(deps.store);
+  const cached = await readSnapshot(deps.store, isLocalApi(deps.apiUrl));
   if (cached) {
     const ageMs = deps.now.getTime() - Date.parse(cached.fetchedAt);
     if (ageMs >= 0 && ageMs < deps.freshSeconds * 1000) {

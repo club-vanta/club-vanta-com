@@ -222,6 +222,14 @@ test.describe("resto de la home", () => {
       )
       .toBe(0);
     await expect(page.locator('#proximo img[src*="missing"]')).toHaveCount(0);
+    // The failed cover leaves the logo, as when there is no cover.
+    const logo = page.locator('#proximo .mask img[src="/vanta.svg"]');
+    await expect(logo).toBeVisible();
+    await expect(logo).toHaveCSS("object-fit", "contain");
+    await expect(page.locator("#proximo .mask")).toHaveCSS(
+      "mask-image",
+      "none",
+    );
 
     const tiles = page.getByTestId("past-tile");
     await expect(tiles).toHaveCount(PAST.length);

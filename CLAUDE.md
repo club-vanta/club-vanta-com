@@ -38,7 +38,7 @@ Everything runs through devenv + direnv (Node 24, OpenTofu, Nix-built Chromium f
 
 ## Where things live
 
-- `src/pages/index.astro` (home, server-rendered, reads alters) and `src/pages/reglas.astro` (static text of `docs/reglas-v0.2.md`).
+- `src/pages/index.astro` (home, server-rendered, reads alters) and `src/pages/reglas.astro` (also server-rendered because of `output: "server"`; static text of `docs/reglas-v0.2.md`).
 - `src/components/`: one file per section. `src/layouts/Base.astro`: head, fonts, the script that removes broken cover images.
 - `src/lib/`: `alters.ts` (pick next and past alters, format dates), `get-alters.ts` and `snapshot-cache.ts` (fetch with timeout, cache fallback), `www-redirect.ts` (used by `src/middleware.ts`).
 - `src/styles/tokens.css`: the only place where colors and scale values are written. `tests/anti-ai-look.test.ts` enforces it.

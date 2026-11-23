@@ -35,11 +35,8 @@ jobs:
 
       # A fresh production build. Never reuse the dist/ left by the e2e job,
       # which is built with CLOUDFLARE_ENV=e2e and points at the fake backend.
-      - name: Build
-        run: npm run build
-
-      - name: Deploy
-        run: npx wrangler deploy
+      - name: Build and deploy
+        run: npm run deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
