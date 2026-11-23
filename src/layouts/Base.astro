@@ -1,0 +1,30 @@
+---
+import "../styles/tokens.css";
+import "../styles/base.css";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const fonts =
+  "https://fonts.googleapis.com/css2?family=League+Gothic&family=Sofia+Sans:wght@400;700&family=Sofia+Sans+Extra+Condensed:wght@800;900&display=swap";
+---
+
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href={fonts} rel="stylesheet" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,43 @@
+/* The only place where colors, shadows and scale values are written.
+   Everything else references these tokens. */
+:root {
+  --ink: #0d0d0d;
+  --ink-2: #151515;
+  --paper: #f1eee6;
+  --red: #e2574c;
+  --mute: #a9a49a;
+  --white: #ffffff;
+  --line: #2a2a2a;
+  --mute-ink: #555555;
+
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-48: 48px;
+  --space-64: 64px;
+  --space-96: 96px;
+
+  --radius-carnet: 18px;
+
+  --shadow-diag: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --shadow-carnet: 0 30px 60px rgba(0, 0, 0, 0.5);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --font-text: "Sofia Sans", sans-serif;
+  --font-cond: "Sofia Sans Extra Condensed", sans-serif;
+  --font-gothic: "League Gothic", sans-serif;
+
+  /* Width of the vertical VANTA rail on desktop, and the content start. */
+  --rail: 150px;
+  --content-start: 190px;
+}
+
+@media (max-width: 899.98px) {
+  :root {
+    --radius-carnet: 14px;
+  }
+}

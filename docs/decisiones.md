@@ -80,3 +80,9 @@ Registro de lo que se decidió para club-vanta.com, en orden. Cada entrada dice 
 - **Portadas por hotlink** a `prod.mazmocdn.com`, con `referrerpolicy="no-referrer"`, en blanco y negro con CSS.
 - **Fecha bajo cada alter pasado:** el mock muestra "abr · máscaras y antifaces", pero el backend no tiene un subtítulo por alter. Va mes y año ("abr 2026").
 - **E2E con Playwright** (grupo `pw` ya activo) contra `astro preview` (workerd) y un backend falso en Node. Sin el job `smoke` contra el backend real de Velvet: sobra para un solo endpoint de lectura.
+
+### Logo y tokens (Task 2)
+
+- **Logo vectorizado con potrace** desde `docs/mocks/vanta.jpg` (umbral 50 % sobre el doble de tamaño, `--turdsize 20`). Comparado lado a lado con el JPG: la V, la corona y el triángulo coinciden. `public/vanta.svg` y `public/vanta-mask.svg` son la silueta blanca sobre transparente (la máscara usa el canal alfa, no `mask-mode: luminance`); `public/favicon.svg` es el mismo trazo en rojo sobre negro.
+- **Tokens que el mock usa y el plan no listaba:** `--white` (título del hero con `mix-blend-mode: difference`), `--line` (`#2a2a2a`, bordes de la cinta) y `--mute-ink` (`#555555`, texto chico del carnet). Las sombras también son tokens (`--shadow-diag`, `--shadow-carnet`).
+- **Filtro anti look de IA:** `tests/anti-ai-look.test.ts` recorre `src/**/*.{astro,css,ts}` (sin `src/api/types.ts`). Los colores solo se permiten en `src/styles/tokens.css`.

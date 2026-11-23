@@ -1,0 +1,36 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-text);
+}
+
+img {
+  max-width: 100%;
+}
+
+:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 2px;
+}
+
+.cond {
+  font-family: var(--font-cond);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.gothic {
+  font-family: var(--font-gothic);
+  font-weight: 400;
+}
