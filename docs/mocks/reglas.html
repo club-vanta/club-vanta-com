@@ -1,0 +1,100 @@
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Sofia+Sans:wght@400;700&family=Sofia+Sans+Extra+Condensed:wght@800;900&display=swap" rel="stylesheet">
+<style>
+  .r { --ink:#0d0d0d; --paper:#f1eee6; --red:#e2574c; --mute:#a9a49a; background:var(--ink); color:var(--paper); font-family:"Sofia Sans", sans-serif; display:grid; grid-template-columns:150px 1fr; border-radius:6px; overflow:hidden; }
+  .r * { box-sizing:border-box; }
+  .cond { font-family:"Sofia Sans Extra Condensed"; font-weight:900; text-transform:uppercase; }
+  .gothic { font-family:"League Gothic"; font-weight:400; }
+  .rail { background:var(--ink); border-right:1px solid #222; position:relative; }
+  .rail span { position:sticky; top:20px; display:block; writing-mode:vertical-rl; transform:rotate(180deg); font-size:150px; line-height:.8; color:var(--red); padding:20px 0; margin:0 auto; }
+  .main { padding:50px 60px 70px; max-width:1100px; }
+  .back { color:var(--mute); font-weight:700; font-size:14px; text-decoration:none; }
+  .head { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:30px; margin:30px 0 10px; }
+  .head h1 { margin:0; font-size:130px; line-height:.8; }
+  .head h1 em { font-style:normal; color:var(--red); display:block; }
+  .ver { border:2px solid var(--paper); padding:10px 14px; text-align:center; font-size:14px; font-weight:700; line-height:1.3; }
+  .ver b { display:block; font-size:44px; line-height:.9; }
+  .must { margin:30px 0 50px; background:var(--red); color:var(--ink); padding:18px 24px; font-size:30px; line-height:1; }
+  .intro { font-size:22px; line-height:1.4; max-width:44ch; margin:0 0 50px; }
+  .block { display:grid; grid-template-columns:220px 1fr; gap:40px; border-top:2px solid var(--paper); padding:30px 0 40px; }
+  .block h2 { margin:0; font-size:44px; line-height:.85; }
+  .block h2 small { display:block; font-family:"Sofia Sans"; font-weight:700; font-size:13px; letter-spacing:.18em; color:var(--red); margin-bottom:10px; }
+  ol.rules { list-style:none; margin:0; padding:0; counter-reset:r var(--start,0); }
+  ol.rules li { counter-increment:r; display:grid; grid-template-columns:64px 1fr; gap:10px; padding:12px 0; border-bottom:1px solid #262626; font-size:18px; line-height:1.45; color:#d8d3c8; }
+  ol.rules li::before { content:counter(r, decimal-leading-zero); font-family:"League Gothic"; font-size:38px; line-height:.9; color:#555; }
+  ol.rules li.key { color:var(--paper); font-weight:700; }
+  ol.rules li.key::before { color:var(--red); }
+  .note { font-size:18px; line-height:1.5; color:#d8d3c8; margin:0 0 14px; max-width:60ch; }
+  .penalty { display:flex; gap:20px; align-items:center; background:#1a1a1a; padding:18px 22px; margin-top:10px; }
+  .penalty .n { font-size:80px; line-height:.8; color:var(--red); }
+  .penalty p { margin:0; font-size:17px; line-height:1.4; }
+  .closing { border-top:2px solid var(--paper); padding-top:30px; display:grid; grid-template-columns:1fr 1fr; gap:40px; font-size:17px; line-height:1.5; color:#d8d3c8; }
+  .closing b { color:var(--paper); }
+</style>
+
+<h2>Página /reglas</h2>
+<p class="subtitle">Mismo sistema que la home: VANTA vertical (queda fijo al scrollear), títulos condensados y el rojo. El texto es el de la v0.2 con la ortografía corregida, sin cambiar el contenido. Las reglas en negrita del documento original van resaltadas con número rojo.</p>
+
+<div class="mockup">
+<div class="mockup-header">club-vanta.com/reglas</div>
+<div class="mockup-body" style="padding:0">
+<div class="r">
+  <div class="rail"><span class="gothic">VANTA</span></div>
+  <div class="main">
+    <a class="back" href="#">← club-vanta.com</a>
+    <div class="head">
+      <h1 class="cond">Reglas de <em>convivencia</em></h1>
+      <div class="ver"><b class="gothic">v0.2</b>versión actual</div>
+    </div>
+    <div class="must cond">Leer este documento es obligatorio para entrar al alter.</div>
+    <p class="intro">Club Vanta propone un espacio cortés. Por lo tanto, esta es la lista de reglas para participar del evento.</p>
+
+    <div class="block">
+      <h2 class="cond"><small>01</small>Convivencia</h2>
+      <ol class="rules">
+        <li class="key">Respetar el espacio personal de todos.</li>
+        <li class="key">No atosigar ni ser insistente en su presencia cuando se pide espacio.</li>
+        <li>No están permitidas las formas violentas.</li>
+        <li>No se permitirá la participación de gente que no tenga un perfil en mazmo.net.</li>
+        <li class="key">No investigar ni revelar información privada de los asistentes al evento en publicaciones de Club Vanta (doxeo).</li>
+        <li>Uno debe saber sus límites y condiciones para relacionarse con los demás y, por lo tanto, tener las herramientas apropiadas para tener un trato cordial y respetuoso.</li>
+        <li>Debe saber decir que no.</li>
+        <li>Debe saber cuáles son sus límites.</li>
+        <li>Debe saber qué quiere, qué desea, y tener una idea de las consecuencias de sus acciones.</li>
+        <li>Debe entender que es un ambiente BDSMK y, por lo tanto, estar medianamente enterado de cuáles son sus características y, con ello, de los límites y riesgos que se le presentan.</li>
+      </ol>
+    </div>
+
+    <div class="block">
+      <h2 class="cond"><small>02</small>Compromiso</h2>
+      <div>
+        <p class="note">El alter no se puede hacer responsable de las decisiones personales de los individuos. Seguramente podremos aconsejar, pero usted es responsable de lo que haga o deje hacer.</p>
+        <p class="note">Recuerde que al anotarse al evento genera un compromiso que asumimos recíproco: de los organizadores, al gestionar el espacio y prepararlo para recibirlos, así como de los participantes, el de asistir.</p>
+        <div class="penalty"><div class="n gothic">2</div><p>La no asistencia y la rotura del compromiso se van a tener en cuenta, y aquellos que acumulen <b>2 anotaciones en falso</b> van a ser penalizados con la imposibilidad de anotarse durante <b>1 fecha</b>.</p></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h2 class="cond"><small>03</small>En el lugar</h2>
+      <ol class="rules">
+        <li class="key">No se permiten prácticas.</li>
+        <li>No se permiten acciones de violencia física.</li>
+        <li>No se permite tener sexo en el baño.</li>
+        <li>No se permite la desnudez completa.</li>
+        <li>No se permite entrar bebida y comida ajena al lugar.</li>
+        <li>Fumar solo en los espacios asignados a tal efecto.</li>
+        <li class="key">Está terminantemente prohibido sacar fotos dentro del espacio y en la vereda del lugar. Un espacio será asignado para aquellos que quieran sacar fotos <b>claramente consensuadas</b> entre los participantes.</li>
+        <li>La organización no se hará responsable por extravío de elementos personales. Igualmente, contaremos con una caja de objetos perdidos.</li>
+      </ol>
+    </div>
+
+    <div class="closing">
+      <p>Por supuesto, los organizadores estamos disponibles y dispuestos a cualquier consulta. Pero solicitamos a todos que entiendan que la resolución va a ser atenta y expedita. Los organizadores debemos estar atentos al evento en general, entonces es limitado nuestro tiempo para las cuestiones particulares.</p>
+      <p>Ante todo se pregona un <b>trato cordial</b>. Podemos decir que la comunidad siempre tiene una intención integradora y accesible y, por lo tanto, instamos a todos a cuidar esa virtud comunitaria.<br><br>La organización se reserva el derecho de admisión y permanencia.<br><br><b>Esta es la versión 0.2 de las reglas de convivencia.</b> Cualquiera que encuentre algo que pueda aportar será escuchado.</p>
+    </div>
+  </div>
+</div>
+</div>
+</div>

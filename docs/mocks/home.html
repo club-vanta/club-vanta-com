@@ -1,0 +1,170 @@
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Sofia+Sans:wght@400;700&family=Sofia+Sans+Extra+Condensed:wght@800;900&display=swap" rel="stylesheet">
+<style>
+  .v { --ink:#0d0d0d; --paper:#f1eee6; --red:#e2574c; --mute:#a9a49a; background:var(--ink); color:var(--paper); font-family:"Sofia Sans", sans-serif; border-radius:6px; overflow:hidden; }
+  .v * { box-sizing:border-box; }
+  .v section { position:relative; overflow:hidden; }
+  .crop { position:relative; overflow:hidden; }
+  .crop img { position:absolute; max-width:none; }
+  .fo { aspect-ratio:423/655; } .ff { aspect-ratio:360/480; }
+  .fo img { width:173%; left:-36.6%; top:-8.4%; } .ff img { width:238.9%; left:-73.6%; top:-26.5%; }
+  .cond { font-family:"Sofia Sans Extra Condensed"; font-weight:900; text-transform:uppercase; }
+  .gothic { font-family:"League Gothic"; font-weight:400; }
+  .pin { position:absolute; z-index:9; background:#ffd54a; color:#111; font:700 12px "Sofia Sans"; padding:4px 8px; border-radius:3px; }
+
+  /* cintas */
+  .tape { overflow:hidden; white-space:nowrap; }
+  .tape .track { display:inline-block; animation:m 30s linear infinite; }
+  .tape .track span { margin-right:36px; }
+  .tape.rev .track { animation-direction:reverse; }
+  @keyframes m { to { transform:translateX(-50%); } }
+
+  /* hero */
+  .hero { height:620px; }
+  .hero .wall { position:absolute; inset:-40px -40px -40px 120px; display:grid; grid-template-columns:repeat(6,1fr); gap:6px; transform:rotate(-4deg) scale(1.06); filter:grayscale(1) contrast(1.1) brightness(.42); }
+  .hero .rail { position:absolute; left:0; top:0; bottom:0; width:150px; background:var(--ink); z-index:2; display:flex; align-items:center; justify-content:center; }
+  .hero .rail span { writing-mode:vertical-rl; transform:rotate(180deg); font-size:190px; line-height:.8; color:var(--red); }
+  .hero h1 { position:absolute; left:190px; right:40px; top:70px; margin:0; font-size:230px; line-height:.8; color:#fff; mix-blend-mode:difference; z-index:3; }
+  .hero .diag { position:absolute; left:-60px; right:-60px; bottom:70px; z-index:4; transform:rotate(-3deg); background:var(--red); color:var(--ink); padding:12px 0; font-size:40px; line-height:1; box-shadow:0 10px 30px rgba(0,0,0,.5); }
+  .hero .diag .track span:nth-child(even) { color:var(--paper); }
+
+  .hero .sub { position:absolute; left:190px; bottom:0; right:0; z-index:3; background:var(--paper); color:var(--ink); padding:16px 28px; display:flex; justify-content:space-between; font-weight:700; }
+  /* próximo */
+  .next { display:grid; grid-template-columns: 1fr 460px; gap:40px; padding:70px 40px 70px 190px; min-height:520px; align-items:center; }
+  .next .kicker { color:var(--red); font-weight:700; letter-spacing:.18em; font-size:13px; }
+  .next h2 { font-size:110px; line-height:.82; margin:14px 0 18px; }
+  .next .when { font-size:44px; line-height:1; margin-bottom:16px; }
+  .next p { color:var(--mute); font-size:17px; line-height:1.5; max-width:40ch; }
+  .next .btn { display:inline-block; margin-top:22px; background:var(--paper); color:var(--ink); padding:14px 22px; font-weight:700; }
+  .mask { position:relative; width:460px; height:460px; overflow:hidden; -webkit-mask-image:url(./vanta.jpg); mask-image:url(./vanta.jpg); mask-mode:luminance; -webkit-mask-size:cover; mask-size:cover; }
+  .mask img { position:absolute; max-width:none; width:1099px; left:-339px; top:-140px; }
+
+  /* qué es */
+  .what { background:var(--paper); color:var(--ink); padding:80px 40px 80px 190px; }
+  .what .big { font-size:120px; line-height:.82; }
+  .what .big span { display:block; } .what .big span:nth-child(2) { padding-left:1.2em; } .what .big span:nth-child(3) { color:var(--red); }
+  .what p { font-size:18px; line-height:1.5; max-width:52ch; margin:28px 0 0; }
+
+  /* carnet */
+  .club { padding:90px 60px 100px 190px; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,52%); gap:50px; align-items:center; }
+  .club h2 { font-size:clamp(44px,4.6vw,120px); line-height:.86; margin:0; } .club h2 span, .club h2 em { display:block; white-space:nowrap; } .club h2 em { font-style:normal; color:var(--red); }
+  .club .lede { color:var(--mute); font-size:17px; line-height:1.5; max-width:40ch; margin:26px 0 0; }
+  .carnet { position:relative; background:var(--paper); color:var(--ink); border-radius:18px; padding:38px 42px 40px; transform:rotate(-3deg); box-shadow:0 30px 60px rgba(0,0,0,.5); }
+  .carnet .top { display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--ink); padding-bottom:14px; }
+  .carnet .top img { width:80px; height:80px; filter:invert(1); }
+  .carnet .top .t { text-align:right; } .carnet .top .t b { display:block; font-size:50px; line-height:.9; } .carnet .top .t span { font-size:14px; letter-spacing:.2em; font-weight:700; color:var(--red); }
+  .carnet ol { list-style:none; margin:26px 0 0; padding:0; display:grid; gap:22px; }
+  .carnet li { display:grid; grid-template-columns:60px 1fr 38px; gap:12px; align-items:center; }
+  .carnet li .n { font-size:76px; line-height:.8; color:var(--red); }
+  .carnet li b { display:block; font-size:38px; line-height:.9; } .carnet li small { font-size:16px; color:#555; }
+  .carnet li .box { width:34px; height:34px; border:2px solid var(--ink); }
+  .carnet .stamp { position:absolute; right:-40px; bottom:-56px; width:120px; height:120px; border-radius:50%; border:3px solid var(--red); color:var(--red); display:flex; align-items:center; justify-content:center; text-align:center; transform:rotate(14deg); font-size:22px; line-height:.9; background:rgba(241,238,230,.92); }
+
+  .carnet .rl { display:inline-block; margin-top:6px; color:var(--red); font-weight:700; text-decoration:underline; text-underline-offset:3px; }
+  /* cinta de códigos antes del archivo */
+  .codes { background:#151515; padding-top:50px; }
+  .codes .tape { border-top:1px solid #2a2a2a; border-bottom:1px solid #2a2a2a; padding:22px 0; font-size:96px; line-height:1; }
+  .codes .tape .track span:nth-child(odd) { color:var(--red); }
+  .codes .tape.rev { border-top:0; }
+  .codes .tape.rev .track { color:transparent; -webkit-text-stroke:1.5px var(--paper); }
+  .codes .tape.rev .track span:nth-child(odd) { -webkit-text-stroke-color:var(--red); }
+
+  /* archivo */
+  .archive { padding:50px 40px 70px 190px; background:#151515; }
+  .archive .grid { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
+  .archive .tile .crop { filter:grayscale(1) brightness(.75); transition:filter .35s; }
+  .archive .tile:hover .crop { filter:none; }
+  .archive .tile b { display:block; margin-top:10px; font-size:26px; line-height:.9; }
+  .archive .tile small { color:var(--mute); font-size:13px; }
+
+  /* pie */
+  .foot { display:grid; grid-template-columns:150px 1fr; }
+  .foot .rail { background:var(--red); color:var(--ink); display:flex; align-items:center; justify-content:center; }
+  .foot .rail span { writing-mode:vertical-rl; transform:rotate(180deg); font-size:96px; line-height:.8; }
+  .foot .cols { padding:50px 40px; display:grid; grid-template-columns:repeat(3,1fr); gap:30px; font-size:15px; line-height:1.7; }
+  .foot .cols b { display:block; font-size:30px; line-height:1; margin-bottom:10px; } .foot .cols span { color:var(--mute); }
+</style>
+
+<h2>Home v5: una sola cinta, con los nombres de los alters</h2>
+<p class="subtitle">Sin la cinta del hero. La cinta queda antes de los alters pasados y funciona como su título.</p>
+
+<div class="mockup">
+<div class="mockup-header">club-vanta.com</div>
+<div class="mockup-body" style="padding:0">
+<div class="v">
+
+  <section class="hero">
+    <div class="wall" id="wall"></div>
+    <div class="rail"><span class="gothic">VANTA</span></div>
+    <h1 class="cond">Club<br>social.</h1>
+    <div class="sub"><span>Alters para la comunidad de mazmo · San Telmo, Buenos Aires</span><span>jueves · 20.30 · gratis</span></div>
+  </section>
+
+  <section class="next">
+    <div>
+      <div class="kicker">PRÓXIMO ALTER</div>
+      <h2 class="cond">D I S C R E E T</h2>
+      <div class="when gothic">JUE 19.11 · 20.30 · SAN TELMO · GRATIS</div>
+      <p>Recuperamos las raíces. Esta vez es un festejo: vengan con sus mejores prendas.</p>
+      <span class="btn">Anotarme en mazmo</span>
+    </div>
+    <div class="mask"><img src="./flyer-full.png" alt=""></div>
+  </section>
+
+  <section class="what">
+    <div class="big cond"><span>Un bar.</span><span>Un jueves.</span><span>Gente charlando.</span></div>
+    <p>Nos juntamos a las 20.30 en un bar de San Telmo. Es gratis y es un espacio público: no se permiten prácticas.</p>
+  </section>
+
+  <section class="club">
+    <div>
+      <h2 class="cond"><span>Un espacio humano</span><em>hecho por humanos.</em></h2>
+      <p class="lede">Cada alter tiene códigos, dinámicas y juegos para que la gente se conozca y se dé la oportunidad de profundizar.</p>
+    </div>
+    <div class="carnet">
+      <div class="top"><img src="./vanta.jpg" alt=""><div class="t"><b class="cond">Club Vanta</b><span>PARA VENIR AL ALTER</span></div></div>
+      <ol>
+        <li><span class="n gothic">1</span><div><b class="cond">Perfil en mazmo</b><small>Sin perfil no se puede entrar.</small></div><span class="box"></span></li>
+        <li><span class="n gothic">2</span><div><b class="cond">Anotate en el post</b><small>¿No podés exponerte? Lista discreta, por privado.</small></div><span class="box"></span></li>
+        <li><span class="n gothic">3</span><div><b class="cond">Leé las reglas</b><small>Es obligatorio para entrar. <a class="rl" href="#">club-vanta.com/reglas →</a></small></div><span class="box"></span></li>
+      </ol>
+      
+    </div>
+  </section>
+
+  <section class="codes">
+    <div class="pin" style="left:190px;top:16px">La cinta · nombres de los alters</div>
+    <div class="tape cond"><div class="track"><span>Spring Break</span><span>Discreet</span><span>Secret Face</span><span>Full Contact</span><span>Tan Selmo</span><span>San Telmo</span><span>Nación BDSM</span><span>A la Vuelta</span><span>Spring Break</span><span>Discreet</span><span>Secret Face</span><span>Full Contact</span><span>Tan Selmo</span><span>San Telmo</span><span>Nación BDSM</span><span>A la Vuelta</span></div></div>
+  </section>
+
+  <section class="archive">
+    <div class="grid">
+      <div class="tile"><div class="crop ff"><img src="./flyer-full.png" alt=""></div><b class="cond">Secret Face</b><small>abr · máscaras y antifaces</small></div>
+      <div class="tile"><div class="crop ff"><img src="./flyer-full.png" alt=""></div><b class="cond">Full Contact</b><small>jun · vamos a responder todo</small></div>
+      <div class="tile"><div class="crop ff"><img src="./flyer-full.png" alt=""></div><b class="cond">Nación BDSM</b><small>jul · con escarapela</small></div>
+      <div class="tile"><div class="crop ff"><img src="./flyer-full.png" alt=""></div><b class="cond">Spring Break</b><small>sep · primaveral y florida</small></div>
+      <div class="tile"><div class="crop ff"><img src="./flyer-full.png" alt=""></div><b class="cond">Discreet</b><small>nov · vengan bellos</small></div>
+    </div>
+  </section>
+
+  <section class="foot">
+    <div class="rail"><span class="gothic">VANTA</span></div>
+    <div class="cols">
+      <div><b class="cond">mazmo</b>@ClubVanta<br><span>preguntas por privado</span></div>
+      <div><b class="cond">Telegram</b>canal de difusión<br><span>@vananitadolc4 · @ashrrou</span></div>
+      <div><b class="cond">Reglas</b><a href="#" style="color:var(--paper);text-decoration:underline">club-vanta.com/reglas</a><br><span>versión 0.2 · leerlas es obligatorio</span></div>
+    </div>
+  </section>
+
+</div>
+</div>
+</div>
+
+<script>
+  (function(){
+    var w = document.getElementById('wall'), t = [['flyer-open.png','fo'],['flyer-full.png','ff']];
+    for (var i = 0; i < 18; i++) { var d = document.createElement('div'); d.className = 'crop ' + t[i%2][1]; d.innerHTML = '<img src="./' + t[i%2][0] + '" alt="">'; w.appendChild(d); }
+  })();
+</script>

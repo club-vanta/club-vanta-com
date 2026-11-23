@@ -1,0 +1,181 @@
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Sofia+Sans:wght@400;700&family=Sofia+Sans+Extra+Condensed:wght@800;900&display=swap" rel="stylesheet">
+<style>
+  .phones { display:flex; gap:40px; justify-content:center; align-items:flex-start; flex-wrap:wrap; }
+  .phone-wrap { cursor:pointer; border:2px solid transparent; border-radius:30px; padding:6px; }
+  .phone-wrap.selected { border-color:var(--selected-border); }
+  .phone-wrap h3 { text-align:center; margin:6px 0 10px; }
+  .phone-wrap p.d { width:375px; margin:0 auto 12px; color:var(--text-secondary); font-size:14px; }
+  .phone { width:375px; height:760px; overflow-y:auto; overflow-x:hidden; border-radius:24px; border:8px solid #222; background:#0d0d0d; }
+
+  .m { --ink:#0d0d0d; --paper:#f1eee6; --red:#e2574c; --mute:#a9a49a; color:var(--paper); font-family:"Sofia Sans", sans-serif; }
+  .m * { box-sizing:border-box; }
+  .m section { position:relative; overflow:hidden; }
+  .cond { font-family:"Sofia Sans Extra Condensed"; font-weight:900; text-transform:uppercase; }
+  .gothic { font-family:"League Gothic"; font-weight:400; }
+  .crop { position:relative; overflow:hidden; } .crop img { position:absolute; max-width:none; }
+  .fo { aspect-ratio:423/655; } .ff { aspect-ratio:360/480; }
+  .fo img { width:173%; left:-36.6%; top:-8.4%; } .ff img { width:238.9%; left:-73.6%; top:-26.5%; }
+
+  /* hero */
+  .hero { height:560px; }
+  .wall { position:absolute; inset:-30px; display:grid; grid-template-columns:repeat(4,1fr); gap:4px; transform:rotate(-4deg) scale(1.08); filter:grayscale(1) contrast(1.1) brightness(.42); }
+  .hero h1 { position:absolute; margin:0; color:#fff; mix-blend-mode:difference; z-index:3; font-size:118px; line-height:.8; }
+  .hero .sub { position:absolute; left:0; right:0; bottom:0; z-index:3; background:var(--paper); color:var(--ink); padding:12px 16px; font-weight:700; font-size:14px; line-height:1.35; }
+  .hero .sub span { display:block; }
+  .hero .sub span + span { color:var(--red); }
+  /* A: riel lateral */
+  .A .hero .rail { position:absolute; left:0; top:0; bottom:0; width:58px; background:var(--ink); z-index:2; display:flex; align-items:center; justify-content:center; }
+  .A .hero .rail span { writing-mode:vertical-rl; transform:rotate(180deg); font-size:88px; line-height:.8; color:var(--red); }
+  .A .hero .wall { left:40px; }
+  .A .hero h1 { left:72px; top:70px; font-size:92px; }
+  .A .hero .sub { left:58px; }
+  /* B: banda arriba */
+  .B .hero .rail { position:absolute; left:0; right:0; top:0; height:110px; background:var(--ink); z-index:2; display:flex; align-items:flex-end; justify-content:center; overflow:hidden; }
+  .B .hero .rail span { font-size:150px; line-height:.72; color:var(--red); letter-spacing:.02em; }
+  .B .hero .wall { top:100px; }
+  .B .hero h1 { left:16px; top:150px; }
+
+  /* próximo */
+  .next { padding:44px 16px 48px; }
+  .A .next, .A .what, .A .club, .A .archive { padding-left:74px; }
+  .kicker { color:var(--red); font-weight:700; letter-spacing:.18em; font-size:12px; }
+  .next h2 { font-size:58px; line-height:.85; margin:10px 0 12px; }
+  .next .when { font-size:26px; line-height:1.05; }
+  .next p { color:var(--mute); font-size:16px; line-height:1.45; margin:12px 0 0; }
+  .mask { position:relative; width:260px; height:260px; margin:26px auto 0; overflow:hidden; -webkit-mask-image:url(./vanta.jpg); mask-image:url(./vanta.jpg); mask-mode:luminance; -webkit-mask-size:cover; mask-size:cover; }
+  .A .mask { margin-left:-20px; }
+  .mask img { position:absolute; max-width:none; width:621px; left:-191px; top:-80px; }
+  .btn { display:block; text-align:center; margin-top:22px; background:var(--paper); color:var(--ink); padding:15px 18px; font-weight:700; }
+
+  /* qué es */
+  .what { background:var(--paper); color:var(--ink); padding:48px 16px; }
+  .what .big { font-size:62px; line-height:.84; } .what .big span { display:block; } .what .big span:nth-child(3) { color:var(--red); }
+  .what p { font-size:16px; line-height:1.45; margin:20px 0 0; }
+
+  /* carnet */
+  .club { padding:52px 16px 60px; }
+  .club h2 { font-size:44px; line-height:.88; margin:0; } .club h2 span, .club h2 em { display:block; } .club h2 em { font-style:normal; color:var(--red); }
+  .A .club h2 { font-size:36px; }
+  .club .lede { color:var(--mute); font-size:16px; line-height:1.45; margin:16px 0 28px; }
+  .carnet { background:var(--paper); color:var(--ink); border-radius:14px; padding:20px 18px; transform:rotate(-2deg); box-shadow:0 20px 40px rgba(0,0,0,.5); }
+  .carnet .top { display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--ink); padding-bottom:10px; }
+  .carnet .top img { width:44px; height:44px; filter:invert(1); }
+  .carnet .top .t { text-align:right; } .carnet .top .t b { display:block; font-size:28px; line-height:.9; } .carnet .top .t span { font-size:10px; letter-spacing:.18em; font-weight:700; color:var(--red); }
+  .carnet ol { list-style:none; margin:14px 0 0; padding:0; display:grid; gap:12px; }
+  .carnet li { display:grid; grid-template-columns:30px 1fr 24px; gap:8px; align-items:center; }
+  .carnet li .n { font-size:44px; line-height:.8; color:var(--red); }
+  .carnet li b { display:block; font-size:22px; line-height:.9; } .carnet li small { font-size:12.5px; color:#555; line-height:1.3; display:block; margin-top:3px; }
+  .carnet li .box { width:22px; height:22px; border:2px solid var(--ink); }
+  .carnet .rl { color:var(--red); font-weight:700; text-decoration:underline; }
+
+  /* cinta */
+  .tape { background:#151515; overflow:hidden; white-space:nowrap; border-top:1px solid #2a2a2a; border-bottom:1px solid #2a2a2a; padding:14px 0; font-size:52px; line-height:1; }
+  .tape .track { display:inline-block; animation:mm 22s linear infinite; }
+  .tape span { margin-right:24px; } .tape span:nth-child(odd) { color:var(--red); }
+  @keyframes mm { to { transform:translateX(-50%); } }
+
+  /* archivo: carrusel horizontal */
+  .archive { background:#151515; padding:24px 0 44px 16px; }
+  .rowx { display:flex; gap:10px; overflow-x:auto; scroll-snap-type:x mandatory; padding-right:16px; scrollbar-width:none; }
+  .rowx .tile { flex:0 0 150px; scroll-snap-align:start; }
+  .rowx .tile b { display:block; margin-top:8px; font-size:22px; line-height:.9; }
+  .rowx .tile small { color:var(--mute); font-size:12px; }
+  .hint { color:var(--mute); font-size:12px; margin-top:12px; }
+
+  /* pie */
+  .foot .band { background:var(--red); color:var(--ink); text-align:center; font-size:110px; line-height:.78; padding-top:14px; overflow:hidden; height:96px; }
+  .foot .cols { padding:28px 16px 40px; display:grid; gap:22px; font-size:15px; line-height:1.6; }
+  .foot .cols b { display:block; font-size:28px; line-height:1; margin-bottom:6px; } .foot .cols span { color:var(--mute); }
+  .foot a { color:var(--paper); text-decoration:underline; }
+
+  /* barra fija con fecha (solo B, para comparar) */
+  .sticky { position:sticky; bottom:0; z-index:20; background:var(--red); color:var(--ink); display:flex; justify-content:space-between; align-items:center; padding:12px 16px; font-weight:700; }
+  .sticky b { font-family:"League Gothic"; font-weight:400; font-size:26px; letter-spacing:.02em; }
+</style>
+
+<h2>Mobile (375 px): dos formas de resolver "VANTA" vertical</h2>
+<p class="subtitle">Todo lo demás es igual en los dos. Cada teléfono scrollea: bajá dentro de cada uno para ver la página entera. Click en el que prefieras.</p>
+
+<div class="phones">
+  <div class="phone-wrap" data-choice="riel" onclick="toggleSelect(this)">
+    <h3>A · Riel lateral</h3>
+    <p class="d">"VANTA" sigue vertical, en un riel angosto a la izquierda del hero, y todo el contenido respeta ese margen. Más fiel al escritorio, pero deja menos ancho para el texto.</p>
+    <div class="phone"><div class="m A" data-tpl></div></div>
+  </div>
+  <div class="phone-wrap" data-choice="banda" onclick="toggleSelect(this)">
+    <h3>B · Banda arriba</h3>
+    <p class="d">En el celular "VANTA" pasa a horizontal, gigante y cortado arriba. Todo el ancho queda para el contenido. Además suma una barra fija abajo con el próximo alter, que acompaña al scrollear.</p>
+    <div class="phone"><div class="m B" data-tpl></div></div>
+  </div>
+</div>
+
+<template id="tpl">
+  <section class="hero">
+    <div class="wall"></div>
+    <div class="rail"><span class="gothic">VANTA</span></div>
+    <h1 class="cond">Club<br>social.</h1>
+    <div class="sub"><span>Alters para la comunidad de mazmo · San Telmo</span><span>jueves · 20.30 · gratis</span></div>
+  </section>
+  <section class="next">
+    <div class="kicker">PRÓXIMO ALTER</div>
+    <h2 class="cond">D I S C R E E T</h2>
+    <div class="when gothic">JUE 19.11 · 20.30<br>SAN TELMO · GRATIS</div>
+    <p>Recuperamos las raíces. Esta vez es un festejo: vengan con sus mejores prendas.</p>
+    <div class="mask"><img src="./flyer-full.png" alt=""></div>
+    <span class="btn">Anotarme en mazmo</span>
+  </section>
+  <section class="what">
+    <div class="big cond"><span>Un bar.</span><span>Un jueves.</span><span>Gente charlando.</span></div>
+    <p>Nos juntamos a las 20.30 en un bar de San Telmo. Es gratis y es un espacio público: no se permiten prácticas.</p>
+  </section>
+  <section class="club">
+    <h2 class="cond"><span>Un espacio humano</span><em>hecho por humanos.</em></h2>
+    <p class="lede">Cada alter tiene códigos, dinámicas y juegos para que la gente se conozca y se dé la oportunidad de profundizar.</p>
+    <div class="carnet">
+      <div class="top"><img src="./vanta.jpg" alt=""><div class="t"><b class="cond">Club Vanta</b><span>PARA VENIR AL ALTER</span></div></div>
+      <ol>
+        <li><span class="n gothic">1</span><div><b class="cond">Perfil en mazmo</b><small>Sin perfil no se puede entrar.</small></div><span class="box"></span></li>
+        <li><span class="n gothic">2</span><div><b class="cond">Anotate en el post</b><small>¿No podés exponerte? Lista discreta, por privado.</small></div><span class="box"></span></li>
+        <li><span class="n gothic">3</span><div><b class="cond">Leé las reglas</b><small>Es obligatorio. <span class="rl">club-vanta.com/reglas →</span></small></div><span class="box"></span></li>
+      </ol>
+    </div>
+  </section>
+  <div class="tape cond"><div class="track"><span>Spring Break</span><span>Discreet</span><span>Secret Face</span><span>Full Contact</span><span>Tan Selmo</span><span>San Telmo</span><span>Spring Break</span><span>Discreet</span><span>Secret Face</span><span>Full Contact</span><span>Tan Selmo</span><span>San Telmo</span></div></div>
+  <section class="archive">
+    <div class="rowx">
+      <div class="tile"><div class="crop ff"><img src="./flyer-full.png" alt=""></div><b class="cond">Discreet</b><small>nov</small></div>
+      <div class="tile"><div class="crop ff"><img src="./flyer-open.png" style="width:117.5%;left:-8.8%;top:-2%" alt=""></div><b class="cond">Open Group</b><small>oct</small></div>
+      <div class="tile"><div class="crop ff"><img src="./flyer-full.png" alt=""></div><b class="cond">Spring Break</b><small>sep</small></div>
+      <div class="tile"><div class="crop ff"><img src="./flyer-full.png" alt=""></div><b class="cond">Nación BDSM</b><small>jul</small></div>
+      <div class="tile"><div class="crop ff"><img src="./flyer-full.png" alt=""></div><b class="cond">Full Contact</b><small>jun</small></div>
+    </div>
+    <div class="hint">← deslizá para ver más · en el celular los afiches van a color (no hay mouse para "pasar por encima")</div>
+  </section>
+  <section class="foot">
+    <div class="band gothic">VANTA</div>
+    <div class="cols">
+      <div><b class="cond">mazmo</b>@ClubVanta<br><span>preguntas por privado</span></div>
+      <div><b class="cond">Telegram</b>canal de difusión<br><span>@vananitadolc4 · @ashrrou</span></div>
+      <div><b class="cond">Reglas</b><a href="#">club-vanta.com/reglas</a><br><span>versión 0.2 · leerlas es obligatorio</span></div>
+    </div>
+  </section>
+</template>
+
+<script>
+  (function(){
+    var tpl = document.getElementById('tpl');
+    document.querySelectorAll('[data-tpl]').forEach(function(host){
+      host.appendChild(tpl.content.cloneNode(true));
+      var w = host.querySelector('.wall'), t = [['flyer-open.png','fo'],['flyer-full.png','ff']];
+      for (var i = 0; i < 28; i++) { var k = (i%3==1)?0:1; var d = document.createElement('div'); d.className = 'crop ff'; d.innerHTML = '<img src="./' + t[k][0] + '" style="' + (k==0?'width:117.5%;left:-8.8%;top:-2%':'') + '" alt="">'; w.appendChild(d); }
+      if (host.classList.contains('B')) {
+        var s = document.createElement('div'); s.className = 'sticky';
+        s.innerHTML = '<span><b>DISCREET</b> · jue 19.11 · 20.30</span><span>Anotarme →</span>';
+        host.appendChild(s);
+      }
+    });
+  })();
+</script>
