@@ -62,18 +62,42 @@ El plan inicial crea 3 recursos (Worker y dos dominios) y no cambia ni destruye 
 
 ## Runbook del primer despliegue
 
-Orden pensado para no pelearse con Wrangler. Cada paso se corre con confirmación del usuario.
+Orden pensado para no pelearse con Wrangler: OpenTofu crea el Worker vacío primero, así `wrangler deploy` sube el código a ese mismo Worker y nunca hay que importar nada. Cada paso se corre con confirmación del usuario.
 
-1. **Aplicar.** `tofu apply` crea el Worker y los dos dominios. Si Cloudflare no deja asociar el dominio a un Worker que todavía no tiene deployment, hacé primero el paso 2 y volvé a aplicar.
-2. **Primer deploy.** `npm ci && npm run build && npx wrangler deploy` con `CLOUDFLARE_API_TOKEN` y `CLOUDFLARE_ACCOUNT_ID` cargados. Desde acá, cada push a `main` con CI en verde despliega solo.
-3. **Secrets de GitHub.** Se cargan desde `.envrc.local`, sin pegar el valor en ningún lado:
+1. **Secrets de GitHub, antes del primer push a `main`.** El repo es `club-vanta/club-vanta-com`. El `gh` de esta máquina elige la cuenta según el dueño del repo, así que pasá siempre `-R`. Los valores salen de `.envrc.local`, sin pegarlos en ningún lado:
 
    ```bash
-   gh secret set CLOUDFLARE_API_TOKEN --body "$CLOUDFLARE_API_TOKEN"
-   gh secret set CLOUDFLARE_ACCOUNT_ID --body "$CLOUDFLARE_ACCOUNT_ID"
+   gh secret set CLOUDFLARE_API_TOKEN --body "$CLOUDFLARE_API_TOKEN" -R club-vanta/club-vanta-com
+   gh secret set CLOUDFLARE_ACCOUNT_ID --body "$CLOUDFLARE_ACCOUNT_ID" -R club-vanta/club-vanta-com
    ```
 
-4. **Plan de nuevo** después del primer `wrangler deploy`. Tiene que dar sin cambios. Si muestra diferencias en atributos que maneja Wrangler, sumalos a `lifecycle` en `cloudflare_worker.site`:
+2. **Crear el Worker vacío bajo OpenTofu:**
+
+   ```bash
+   direnv exec . bash -c 'cd infra && tofu apply -target=cloudflare_worker.site'
+   ```
+
+3. **Subir el código a ese mismo Worker:**
+
+   ```bash
+   direnv exec . bash -c 'npm ci && npm run build && npx wrangler deploy'
+   ```
+
+4. **Crear los dos dominios:**
+
+   ```bash
+   direnv exec . bash -c 'cd infra && tofu apply'
+   ```
+
+   Si devuelve 403 al crear un dominio personalizado, el token probablemente necesita también Zone > DNS > Edit (Workers crea el registro DNS del dominio).
+
+5. **El plan tiene que dar sin cambios:**
+
+   ```bash
+   direnv exec . bash -c 'cd infra && tofu plan'
+   ```
+
+   Si muestra diferencias en atributos que maneja Wrangler, sumalos a `lifecycle` en `cloudflare_worker.site`:
 
    ```hcl
    lifecycle {
@@ -83,10 +107,33 @@ Orden pensado para no pelearse con Wrangler. Cada paso se corre con confirmació
 
    Hoy el recurso ya fija `observability.enabled = true` y `subdomain.enabled = false`, que es lo que dice `wrangler.jsonc` (`observability.enabled`, `workers_dev: false`, `preview_urls: false`), así que el `ignore_changes` es solo el plan B.
 
-5. **Verificar en producción:**
+6. **Verificar en producción:**
 
    ```bash
    curl -sI https://www.club-vanta.com/reglas   # 301 a https://club-vanta.com/reglas
    curl -sI https://club-vanta.com/             # 200, con el próximo alter o "Todavía no hay fecha"
    curl -sI https://club-vanta.com/reglas       # 200
    ```
+
+Desde acá, cada push a `main` con CI en verde despliega solo.
+
+### Si el Worker se creó afuera de OpenTofu
+
+Si el Worker ya existe (por ejemplo, alguien corrió `wrangler deploy` antes del paso 2), `tofu apply` falla porque `cloudflare_worker.site` ya existe. Importalo al estado. El formato del ID es `<account_id>/<worker_id>`, según la doc del recurso (`docs/resources/worker.md` del provider, versión v5.28.1, la más cercana a la 5.29.0 que usamos):
+
+```bash
+direnv exec . bash -c 'cd infra && tofu import cloudflare_worker.site "$CLOUDFLARE_ACCOUNT_ID/<worker_id>"'
+```
+
+El `<worker_id>` es el `id` del Worker, que puede no ser igual al nombre. Buscalo con `GET /accounts/$CLOUDFLARE_ACCOUNT_ID/workers/workers` (el campo `id` del Worker `club-vanta-com`). Después seguí con el paso 4.
+
+## Rollback
+
+- **Código malo en producción.** Volvé a la versión anterior con `npx wrangler rollback` (con las credenciales cargadas), o redesplegá un SHA anterior: `git checkout <sha> && npm ci && npm run build && npx wrangler deploy`. Para que un push posterior no lo pise, revertí el commit en `main`.
+- **Sacar el sitio del aire.** Desatá los dos dominios sin tocar el Worker:
+
+  ```bash
+  direnv exec . bash -c 'cd infra && tofu destroy -target=cloudflare_workers_custom_domain.apex -target=cloudflare_workers_custom_domain.www'
+  ```
+
+  Para volver a ponerlo, `tofu apply`. Los MX y TXT del correo no se ven afectados.
