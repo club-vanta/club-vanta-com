@@ -14,7 +14,7 @@
     "check": "npm run typecheck && npm run format:check && npm run lint",
     "test": "vitest",
     "test:run": "TZ=UTC vitest run",
-    "generate:api": "openapi-typescript https://raw.githubusercontent.com/club-vanta/alter-tracker-backend/refs/heads/main/openapi.json -o src/api/types.ts && prettier --write src/api/types.ts"
+    "generate:api": "openapi-typescript ${OPENAPI_SOURCE:-https://raw.githubusercontent.com/club-vanta/alter-tracker-backend/refs/heads/main/openapi.json} -o src/api/types.ts && prettier --write src/api/types.ts"
   },
   "dependencies": {
     "@astrojs/cloudflare": "13.7.0",

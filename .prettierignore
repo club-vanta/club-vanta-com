@@ -10,3 +10,4 @@ infra/.terraform/
 .playwright-mcp/
 # Docs with fenced code blocks that Prettier would reformat.
 docs/
+src/api/types.ts
