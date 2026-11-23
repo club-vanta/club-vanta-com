@@ -1,5 +1,32 @@
 ---
+import { env } from "cloudflare:workers";
 import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import NextAlter from "../components/NextAlter.astro";
+import StickyNext from "../components/StickyNext.astro";
+import { selectAlters } from "../lib/alters";
+import { getAlters } from "../lib/get-alters";
+import { cacheSnapshotStore } from "../lib/snapshot-cache";
+
+export const prerender = false;
+
+const now = new Date();
+const { alters } = await getAlters({
+  fetchImpl: fetch,
+  store: cacheSnapshotStore(caches.default),
+  apiUrl: env.ALTERS_API_URL,
+  freshSeconds: Number(env.ALTERS_FRESH_SECONDS),
+  timeoutMs: 2500,
+  now,
+});
+const { next, past } = selectAlters(alters, now);
+const covers = [
+  ...new Set(
+    [next, ...past].flatMap((a) => (a?.cover_url ? [a.cover_url] : [])),
+  ),
+];
+
+Astro.response.headers.set("Cache-Control", "public, max-age=60");
 ---
 
 <Base
@@ -7,7 +34,8 @@ import Base from "../layouts/Base.astro";
   description="Alters para la comunidad de mazmo: un bar de San Telmo, un jueves, gente charlando."
 >
   <main>
-    <h1 class="cond">Club Vanta</h1>
-    <p>El sitio está en construcción.</p>
+    <Hero covers={covers} />
+    <NextAlter next={next} last={past[0] ?? null} />
   </main>
+  {next && <StickyNext next={next} />}
 </Base>

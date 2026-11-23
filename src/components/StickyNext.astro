@@ -1,0 +1,59 @@
+---
+import { formatNextDate, type PublicAlter } from "../lib/alters";
+
+interface Props {
+  next: PublicAlter;
+}
+
+const { next } = Astro.props;
+---
+
+<aside class="sticky-next" data-testid="sticky-next" aria-label="Próximo alter">
+  <span>
+    <b>{next.short_name.toUpperCase()}</b> ·{" "}
+    {formatNextDate(next.date).toLowerCase()}
+  </span>
+  <a href={next.mazmo_url}>Anotarme →</a>
+</aside>
+
+<style>
+  .sticky-next {
+    display: none;
+  }
+
+  @media (max-width: 899.98px) {
+    .sticky-next {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-12);
+      padding: var(--space-12) var(--space-16);
+      background: var(--red);
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    b {
+      font-family: var(--font-gothic);
+      font-size: 26px;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+    }
+
+    a {
+      flex: none;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    /* Room at the end of the page so the bar does not cover the footer. */
+    :global(body:has(.sticky-next)) {
+      padding-bottom: var(--space-64);
+    }
+  }
+</style>

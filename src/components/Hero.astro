@@ -1,0 +1,196 @@
+---
+interface Props {
+  covers: string[];
+}
+
+const { covers } = Astro.props;
+
+// Enough tiles to cover the rotated wall: 3 rows of 6 on desktop (the rest
+// are hidden there), 7 rows of 4 on mobile. Covers repeat to fill it.
+const TILES = 28;
+const FIRST_ROW = 6;
+const tiles =
+  covers.length === 0
+    ? []
+    : Array.from({ length: TILES }, (_, i) => covers[i % covers.length]);
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="wall" data-testid="wall" aria-hidden="true">
+    {tiles.map((src, i) => (
+      <div class="tile">
+        <img
+          src={src}
+          alt=""
+          referrerpolicy="no-referrer"
+          loading={i < FIRST_ROW ? "eager" : "lazy"}
+          decoding="async"
+        />
+      </div>
+    ))}
+  </div>
+  <div class="rail" aria-hidden="true">
+    <span class="gothic">VANTA</span>
+  </div>
+  <h1 id="hero-title" class="cond">
+    Club
+    <br />
+    social.
+  </h1>
+  <p class="sub">
+    <!-- prettier-ignore -->
+    <span>Alters para la comunidad de mazmo · San Telmo<span class="city">, Buenos Aires</span></span>
+    <span>jueves · 20.30 · gratis</span>
+  </p>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    height: 620px;
+  }
+
+  .wall {
+    position: absolute;
+    inset: -40px -40px -40px 120px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    align-content: start;
+    gap: 6px;
+    transform: rotate(-4deg) scale(1.06);
+    filter: grayscale(1) contrast(1.1) brightness(0.42);
+  }
+
+  .tile {
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: var(--ink-2);
+  }
+
+  .tile:nth-child(n + 19) {
+    display: none;
+  }
+
+  .tile img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+  }
+
+  .rail {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--rail);
+    background: var(--ink);
+  }
+
+  .rail span {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 190px;
+    line-height: 0.8;
+    color: var(--red);
+  }
+
+  h1 {
+    position: absolute;
+    top: 70px;
+    right: 40px;
+    left: var(--content-start);
+    z-index: 3;
+    margin: 0;
+    font-size: clamp(150px, 18vw, 230px);
+    line-height: 0.8;
+    color: var(--white);
+    mix-blend-mode: difference;
+  }
+
+  .sub {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: var(--content-start);
+    z-index: 3;
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-16);
+    margin: 0;
+    padding: var(--space-16) 28px;
+    background: var(--paper);
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  @media (max-width: 899.98px) {
+    .hero {
+      height: 560px;
+    }
+
+    .wall {
+      inset: 100px -30px -30px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-4);
+      transform: rotate(-4deg) scale(1.08);
+    }
+
+    .tile:nth-child(n + 19) {
+      display: block;
+    }
+
+    .rail {
+      right: 0;
+      bottom: auto;
+      align-items: flex-end;
+      width: auto;
+      height: 110px;
+      overflow: hidden;
+    }
+
+    .rail span {
+      writing-mode: horizontal-tb;
+      transform: none;
+      font-size: 150px;
+      line-height: 0.72;
+      letter-spacing: 0.02em;
+    }
+
+    h1 {
+      top: 150px;
+      right: auto;
+      left: var(--space-16);
+      font-size: 118px;
+    }
+
+    .sub {
+      left: 0;
+      display: block;
+      padding: var(--space-12) var(--space-16);
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .sub span {
+      display: block;
+    }
+
+    .sub .city {
+      display: none;
+    }
+
+    /* Red on paper is 3.2:1, enough only for large text (bold from 18.66 px).
+       The mock has it at 14 px; it grows so the accent stays readable. */
+    .sub > span + span {
+      color: var(--red);
+      font-size: 19px;
+    }
+  }
+</style>

@@ -1,0 +1,157 @@
+---
+import Mask from "./Mask.astro";
+import { formatNextDate, type PublicAlter } from "../lib/alters";
+
+interface Props {
+  next: PublicAlter | null;
+  last: PublicAlter | null;
+}
+
+const { next, last } = Astro.props;
+const TELEGRAM = "https://t.me/+0H-a1v8KRDYzMDMx";
+---
+
+<section id="proximo" class="next" aria-labelledby="proximo-title">
+  <div class="copy">
+    <p class="kicker">PRÓXIMO ALTER</p>
+    {next ? (
+      <>
+        <h2 id="proximo-title" class="cond">
+          {next.short_name.toUpperCase()}
+        </h2>
+        <p class="when gothic" data-testid="when">
+          <span>{formatNextDate(next.date)}</span>
+          <span class="sep">·</span>
+          <span>SAN TELMO · GRATIS</span>
+        </p>
+        {next.excerpt && <p class="text">{next.excerpt}</p>}
+        <a class="btn" href={next.mazmo_url}>
+          Anotarme en mazmo
+        </a>
+      </>
+    ) : (
+      <>
+        <h2 id="proximo-title" class="cond">
+          Todavía no hay fecha
+        </h2>
+        <p class="text">
+          Hacemos un alter cada uno o dos meses y lo publicamos en mazmo unas
+          tres semanas antes.
+          {last && <>El último fue {last.short_name}.</>}
+        </p>
+        <a class="btn" href={TELEGRAM}>
+          Enterate primero en Telegram
+        </a>
+      </>
+    )}
+  </div>
+  <Mask
+    coverUrl={next ? next.cover_url : (last?.cover_url ?? null)}
+    muted={!next}
+  />
+</section>
+
+<style>
+  .next {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(280px, 36vw, 460px);
+    gap: 40px;
+    align-items: center;
+    min-height: 520px;
+    padding: 70px 40px 70px var(--content-start);
+    overflow: hidden;
+  }
+
+  .kicker {
+    margin: 0;
+    color: var(--red);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+  }
+
+  h2 {
+    margin: 14px 0 18px;
+    font-size: clamp(64px, 8.6vw, 110px);
+    line-height: 0.82;
+    overflow-wrap: break-word;
+  }
+
+  .when {
+    margin: 0 0 var(--space-16);
+    font-size: 44px;
+    line-height: 1;
+  }
+
+  .text {
+    max-width: 40ch;
+    color: var(--mute);
+    font-size: 17px;
+    line-height: 1.5;
+  }
+
+  .btn {
+    display: inline-block;
+    margin-top: 22px;
+    padding: 14px 22px;
+    background: var(--paper);
+    color: var(--ink);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  @media (max-width: 899.98px) {
+    /* One column: text, mask, then the button at full width. */
+    .next {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      min-height: 0;
+      padding: 44px var(--space-16) var(--space-48);
+    }
+
+    .copy {
+      display: contents;
+    }
+
+    .kicker {
+      font-size: var(--space-12);
+    }
+
+    h2 {
+      margin: 10px 0 var(--space-12);
+      font-size: 58px;
+      line-height: 0.85;
+    }
+
+    .when {
+      margin: 0;
+      font-size: 26px;
+      line-height: 1.05;
+    }
+
+    .when span {
+      display: block;
+    }
+
+    .when .sep {
+      display: none;
+    }
+
+    .text {
+      max-width: none;
+      margin: var(--space-12) 0 0;
+      font-size: 16px;
+      line-height: 1.45;
+    }
+
+    .btn {
+      order: 1;
+      display: block;
+      padding: 15px 18px;
+      text-align: center;
+    }
+  }
+</style>
