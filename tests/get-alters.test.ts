@@ -72,6 +72,22 @@ function makeDeps(
 }
 
 describe("getAlters", () => {
+  it("calls fetchImpl without binding it to deps", async () => {
+    // workerd's fetch throws "Illegal invocation" when `this` is not the
+    // global scope, so `deps.fetchImpl(...)` breaks with `fetchImpl: fetch`.
+    const fresh = [alter(1)];
+    const { deps } = makeDeps(memoryStore(null), async () =>
+      jsonResponse({ alters: [] }),
+    );
+    deps.fetchImpl = function (this: unknown) {
+      if (this !== undefined && this !== globalThis) {
+        throw new TypeError("Illegal invocation");
+      }
+      return Promise.resolve(jsonResponse({ alters: fresh }));
+    } as typeof fetch;
+    expect(await getAlters(deps)).toEqual({ alters: fresh, source: "backend" });
+  });
+
   it("uses a fresh copy without calling the backend", async () => {
     const cached = [alter(1)];
     const store = memoryStore(snapshotAt(60, cached));

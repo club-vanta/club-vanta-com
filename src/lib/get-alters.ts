@@ -57,8 +57,11 @@ async function readSnapshot(store: SnapshotStore): Promise<Snapshot | null> {
 }
 
 async function fetchAlters(deps: GetAltersDeps): Promise<PublicAlter[] | null> {
+  // Called unbound: workerd's fetch throws "Illegal invocation" when `this`
+  // is `deps`.
+  const { fetchImpl } = deps;
   try {
-    const response = await deps.fetchImpl(`${deps.apiUrl}/public/alters`, {
+    const response = await fetchImpl(`${deps.apiUrl}/public/alters`, {
       signal: AbortSignal.timeout(deps.timeoutMs),
     });
     if (response.status !== 200) return null;
