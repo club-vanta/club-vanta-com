@@ -1,6 +1,6 @@
 # CLAUDE.md - club-vanta.com
 
-Public website of Club Vanta, served at `club-vanta.com`. The project is in the design phase: there is no code yet.
+Public website of Club Vanta, served at `club-vanta.com`. The site is built (Astro 6 on Cloudflare Workers) and waits for its first deploy.
 
 ## Rule: keep the context in this repo
 
@@ -27,3 +27,23 @@ A small, non-profit social club that organizes alters (social meetups in bars) f
 - **Avoid the generic AI look.** See "Design direction" in `docs/decisiones.md`.
 - **All Cloudflare infrastructure is declared in OpenTofu** (`tofu`, not `terraform`) under `infra/`. Never configure anything by hand in the Cloudflare UI. Follow the pattern in `../velvet/infra/`.
 - Copy is in Rioplatense Spanish (voseo), in the club's own voice. See `docs/contexto.md`.
+
+## Running it
+
+Everything runs through devenv + direnv (Node 24, OpenTofu, Nix-built Chromium for Playwright). Prefix commands with `direnv exec .` outside an interactive shell. `.envrc.local` holds the Cloudflare token and AWS profile: never print or commit it.
+
+- `npm run dev`: dev server. `npm run build` + `npm run preview`: production build served by workerd.
+- `npm run check` (typecheck, prettier, eslint), `npm run test:run` (Vitest), `npm run test:e2e` (builds with `CLOUDFLARE_ENV=e2e`, then Playwright at 1280 and 375 px with axe). Run all four plus `npm run build` before committing.
+- `npm run generate:api`: regenerates `src/api/types.ts` from the backend `openapi.json`. Do not edit that file by hand.
+
+## Where things live
+
+- `src/pages/index.astro` (home, server-rendered, reads alters) and `src/pages/reglas.astro` (static text of `docs/reglas-v0.2.md`).
+- `src/components/`: one file per section. `src/layouts/Base.astro`: head, fonts, the script that removes broken cover images.
+- `src/lib/`: `alters.ts` (pick next and past alters, format dates), `get-alters.ts` and `snapshot-cache.ts` (fetch with timeout, cache fallback), `www-redirect.ts` (used by `src/middleware.ts`).
+- `src/styles/tokens.css`: the only place where colors and scale values are written. `tests/anti-ai-look.test.ts` enforces it.
+- `e2e/`: specs, `fake-backend.mjs` and `fixtures.mjs` (scenarios: with-next, no-next, down, slow, and more).
+- `public/`: logo SVGs, favicon, `robots.txt` (indexing allowed).
+- `wrangler.jsonc`: Worker config. `ALTERS_API_URL` points to the real backend; the `e2e` environment points to the fake one.
+- `infra/`: OpenTofu for the Worker and domains. Runbook, credentials and rollback in `infra/README.md`. `.github/workflows/`: `ci.yml` and `deploy.yml` (deploys after CI passes on `main`).
+- `README.md`: the Spanish overview for the team.

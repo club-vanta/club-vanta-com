@@ -17,7 +17,7 @@ Registro de lo que se decidió para club-vanta.com, en orden. Cada entrada dice 
 ### Privacidad
 
 - No se muestran nombres, perfiles ni fotos de asistentes. Motivo: las reglas prohíben el doxeo y las fotos, y existe una lista discreta.
-- Pendiente: decidir si buscadores pueden indexar el sitio.
+- Los buscadores pueden indexar el sitio (decidido en Task 9, ver "Cierre"). El sitio no muestra datos de personas.
 
 ### Dirección de diseño
 
@@ -109,3 +109,10 @@ Registro de lo que se decidió para club-vanta.com, en orden. Cada entrada dice 
 - **Texto de cada regla dentro de un `<span>`.** En el mock, `li` es una grilla y el texto en negrita dentro de la regla (`claramente consensuadas`) caía como una celda aparte y rompía la regla de las fotos. El `<span>` mantiene el texto idéntico y la regla en una sola celda.
 - **El número del bloque ("01") y el título se separan con un espacio** en el HTML (el mock los pegaba); las palabras y el orden son los mismos.
 - **Mobile sin mock propio:** banda "VANTA" horizontal de 110 px arriba, títulos de bloque encima de su lista, números de regla de 32 px.
+
+### Cierre (Task 9)
+
+- **Buscadores: se permite indexar.** `public/robots.txt` con `User-agent: *` y `Allow: /`. Motivo: el club no es una organización secreta ("somos un club social, no una organización secreta") y el sitio no muestra nombres, conteos ni fotos de asistentes, así que indexarlo no expone a nadie. Se sirve como archivo estático del Worker.
+- **Textos revisados contra el filtro de IA y la voz del club.** Cambios: `<title>` de la home pasa de "Club Vanta" a "Club Vanta · Alters en San Telmo" (dice qué es en la pestaña y en el resultado de búsqueda); la `description` de la home deja de repetir el eslogan y dice los datos (club sin fines de lucro, jueves a las 20.30, San Telmo, gratis); la de `/reglas` tenía "Leelas" sin tilde (voseo: "Leélas") y decía "son pocas", que no es cierto (son 18), y pasa a "Leerlas es obligatorio para entrar".
+- **Foco en la barra fija mobile.** El contorno rojo de `:focus-visible` desaparecía sobre la barra roja: en ese link va en negro. Además `scroll-padding-bottom` en `html` para que la barra no tape el elemento enfocado al tabular.
+- **Se deja como está:** CLS de 0,05 en mobile (cambio de fuente al cargar Google Fonts; el umbral "bueno" es 0,1) y el título "CLUB SOCIAL." con `mix-blend-mode: difference`, que sobre los puntos más claros del muro baja el contraste; es el diseño aprobado del mock y el muro está oscurecido a propósito.
