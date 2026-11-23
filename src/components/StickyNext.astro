@@ -45,6 +45,11 @@ const { next } = Astro.props;
       letter-spacing: 0.02em;
     }
 
+    /* The default red outline disappears on the red bar. */
+    a:focus-visible {
+      outline-color: var(--ink);
+    }
+
     a {
       flex: none;
       color: var(--ink);
@@ -52,6 +57,10 @@ const { next } = Astro.props;
     }
 
     /* Room at the end of the page so the bar does not cover the footer. */
+    :global(html:has(.sticky-next)) {
+      scroll-padding-bottom: var(--space-64);
+    }
+
     :global(body:has(.sticky-next)) {
       padding-bottom: var(--space-64);
     }
