@@ -101,3 +101,11 @@ Registro de lo que se decidió para club-vanta.com, en orden. Cada entrada dice 
 - **Cinta:** si hay pocos nombres, la lista se repite hasta tener al menos 8 y un número par, para que el loop `translateX(-50%)` no deje hueco ni cambie de color al reiniciar. Es `aria-hidden`; el título accesible de la sección es un `h2` oculto "Alters pasados".
 - **"← deslizá para ver más"** del mock mobile va debajo del carrusel solo en pantallas de menos de 600 px y con 3 alters o más; el resto de esa línea del mock era una nota para el diseño.
 - Sin portada, el tile muestra el nombre corto sobre `--ink-2` con un borde `--line`, en la misma proporción 3:4.
+
+### /reglas (Task 7)
+
+- **Número de las reglas sin resaltar: `#7a7a7a` y no `#555`.** El gris del mock (`#555`) sobre negro da 2,6:1 y no llega a 3:1 ni siquiera como texto grande (38 px). Se subió a `--num` (`#7a7a7a`, 4,5:1) y se mantiene claramente más apagado que el rojo de las reglas en negrita.
+- **Colores del mock que faltaban como token:** `--ink-3` (`#1a1a1a`, fondo de la penalidad) y `--paper-soft` (`#d8d3c8`, texto corriente). Los bordes entre reglas usan `--line` (`#2a2a2a`) en lugar de `#262626`: la diferencia no se ve.
+- **Texto de cada regla dentro de un `<span>`.** En el mock, `li` es una grilla y el texto en negrita dentro de la regla (`claramente consensuadas`) caía como una celda aparte y rompía la regla de las fotos. El `<span>` mantiene el texto idéntico y la regla en una sola celda.
+- **El número del bloque ("01") y el título se separan con un espacio** en el HTML (el mock los pegaba); las palabras y el orden son los mismos.
+- **Mobile sin mock propio:** banda "VANTA" horizontal de 110 px arriba, títulos de bloque encima de su lista, números de regla de 32 px.

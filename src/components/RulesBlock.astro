@@ -1,0 +1,56 @@
+---
+interface Props {
+  number: string;
+  title: string;
+}
+
+const { number, title } = Astro.props;
+---
+
+<section class="block">
+  <h2 class="cond">
+    <small>{number}</small>
+    {title}
+  </h2>
+  <div class="body">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .block {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 40px;
+    padding: 30px 0 40px;
+    border-top: 2px solid var(--paper);
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 44px;
+    line-height: 0.85;
+  }
+
+  small {
+    display: block;
+    margin-bottom: var(--space-12);
+    font-family: var(--font-text);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    color: var(--red);
+  }
+
+  @media (max-width: 899.98px) {
+    .block {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-24);
+      padding: var(--space-24) 0 var(--space-32);
+    }
+
+    h2 {
+      font-size: 40px;
+    }
+  }
+</style>
