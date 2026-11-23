@@ -86,3 +86,8 @@ Registro de lo que se decidió para club-vanta.com, en orden. Cada entrada dice 
 - **Logo vectorizado con potrace** desde `docs/mocks/vanta.jpg` (umbral 50 % sobre el doble de tamaño, `--turdsize 20`). Comparado lado a lado con el JPG: la V, la corona y el triángulo coinciden. `public/vanta.svg` y `public/vanta-mask.svg` son la silueta blanca sobre transparente (la máscara usa el canal alfa, no `mask-mode: luminance`); `public/favicon.svg` es el mismo trazo en rojo sobre negro.
 - **Tokens que el mock usa y el plan no listaba:** `--white` (título del hero con `mix-blend-mode: difference`), `--line` (`#2a2a2a`, bordes de la cinta) y `--mute-ink` (`#555555`, texto chico del carnet). Las sombras también son tokens (`--shadow-diag`, `--shadow-carnet`).
 - **Filtro anti look de IA:** `tests/anti-ai-look.test.ts` recorre `src/**/*.{astro,css,ts}` (sin `src/api/types.ts`). Los colores solo se permiten en `src/styles/tokens.css`.
+
+### Hero y próximo alter (Task 5)
+
+- **En mobile, la línea roja "jueves · 20.30 · gratis" va a 19 px y no a 14 px como en el mock.** A 14 px, el rojo sobre papel da 3,18:1 y no pasa WCAG AA para texto chico (axe lo marca como `serious`). A 19 px en negrita cuenta como texto grande (alcanza con 3:1), así que el acento rojo del mock se mantiene.
+- **Los tiles del muro del hero son todos 3:4**, en lugar de alternar las proporciones del mock (423:655 y 360:480). Las portadas reales de mazmo miden unos 303x404 (3:4); forzarlas a otra proporción recortaría los costados del flyer.
