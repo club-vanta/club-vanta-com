@@ -80,6 +80,10 @@ describe("formatPastDate", () => {
   it("shows short month and year", () => {
     expect(formatPastDate("2026-04-16T23:30:00Z")).toBe("abr 2026");
   });
+
+  it("cuts September to three letters", () => {
+    expect(formatPastDate("2026-09-24T23:30:00Z")).toBe("sep 2026");
+  });
 });
 
 describe("tapeNames", () => {

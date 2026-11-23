@@ -88,6 +88,21 @@ export const SCENARIOS = {
   "no-covers": (now) => ({
     alters: PAST.map((a) => toAlter({ ...a, cover: null }, at(now, a.days))),
   }),
+  // Cover URLs that answer 404, as when mazmocdn fails or blocks a hotlink.
+  "broken-covers": (now) => ({
+    alters: [
+      toAlter({ ...NEXT, cover: "missing" }, at(now, 10)),
+      ...PAST.map((a, i) =>
+        toAlter(
+          i === BROKEN_PAST ? { ...a, cover: "missing" } : a,
+          at(now, a.days),
+        ),
+      ),
+    ],
+  }),
 };
+
+/** Index in PAST of the alter whose cover is broken in `broken-covers`. */
+export const BROKEN_PAST = 1;
 
 export const SLOW_MS = 5000;

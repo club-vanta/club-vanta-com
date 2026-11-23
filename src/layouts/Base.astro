@@ -23,6 +23,19 @@ const fonts =
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href={fonts} rel="stylesheet" />
+    <!-- Covers are hotlinked from mazmo. If one fails (404, blocked hotlink),
+         remove it so no broken-image icon shows; each component leaves the
+         intended empty look behind. Image errors do not bubble, so this
+         listens in the capture phase, before any image is parsed. -->
+    <script is:inline>
+      window.addEventListener(
+        "error",
+        (event) => {
+          if (event.target instanceof HTMLImageElement) event.target.remove();
+        },
+        true,
+      );
+    </script>
   </head>
   <body>
     <slot />

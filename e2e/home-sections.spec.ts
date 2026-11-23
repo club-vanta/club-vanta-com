@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { NEXT, PAST } from "./fixtures.mjs";
+import { BROKEN_PAST, NEXT, PAST } from "./fixtures.mjs";
 import { collectErrors, expectNoSeriousA11y, setScenario } from "./helpers";
 import { formatPastDate } from "../src/lib/alters";
 
@@ -198,6 +198,40 @@ test.describe("resto de la home", () => {
       await expect(blank).toHaveCSS("background-color", INK_2);
     }
     expect(errors).toEqual([]);
+  });
+
+  test("broken-covers: una portada que no carga no deja una imagen rota", async ({
+    page,
+    request,
+  }) => {
+    await setScenario(request, "broken-covers");
+    await page.goto("/");
+    await scrollThrough(page);
+    await page.waitForLoadState("networkidle");
+
+    // Every broken image removed itself; lazy images that never loaded
+    // (hidden wall tiles) are not `complete` and do not count.
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () =>
+            [...document.images].filter(
+              (img) => img.complete && img.naturalWidth === 0,
+            ).length,
+        ),
+      )
+      .toBe(0);
+    await expect(page.locator('#proximo img[src*="missing"]')).toHaveCount(0);
+
+    const tiles = page.getByTestId("past-tile");
+    await expect(tiles).toHaveCount(PAST.length);
+    const broken = tiles.nth(BROKEN_PAST);
+    await expect(broken.locator("img")).toHaveCount(0);
+    const blank = broken.getByTestId("no-cover");
+    await expect(blank).toBeVisible();
+    await expect(blank).toContainText(PAST[BROKEN_PAST].short_name);
+    await expect(blank).toHaveCSS("background-color", INK_2);
+    await expect(tiles.nth(0).locator("img")).toHaveCount(1);
   });
 
   test("empty: sin cinta ni pasados, con el resto de la página", async ({

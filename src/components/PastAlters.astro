@@ -16,8 +16,13 @@ const { past } = Astro.props;
     {past.map((alter) => (
       <li class="tile" data-testid="past-tile">
         <a href={alter.mazmo_url}>
-          {alter.cover_url ? (
-            <span class="cover">
+          <span class="cover">
+            {/* The name sits behind the cover: it is what shows when there is
+                no cover or the cover fails to load (Base.astro removes broken images). */}
+            <span class="blank cond" data-testid="no-cover" aria-hidden="true">
+              {alter.short_name}
+            </span>
+            {alter.cover_url && (
               <img
                 src={alter.cover_url}
                 alt={`Flyer de ${alter.short_name}`}
@@ -25,12 +30,8 @@ const { past } = Astro.props;
                 loading="lazy"
                 decoding="async"
               />
-            </span>
-          ) : (
-            <span class="cover blank cond" data-testid="no-cover">
-              {alter.short_name}
-            </span>
-          )}
+            )}
+          </span>
           <b class="cond">{alter.short_name}</b>
           <small>{formatPastDate(alter.date)}</small>
         </a>
@@ -75,6 +76,7 @@ const { past } = Astro.props;
   }
 
   .cover {
+    position: relative;
     display: block;
     aspect-ratio: 3 / 4;
     overflow: hidden;
@@ -82,6 +84,8 @@ const { past } = Astro.props;
   }
 
   img {
+    position: absolute;
+    inset: 0;
     display: block;
     width: 100%;
     height: 100%;
@@ -98,10 +102,13 @@ const { past } = Astro.props;
 
   /* Without a cover the tile keeps its shape and shows the name. */
   .blank {
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: flex-end;
     padding: var(--space-12);
     border: 1px solid var(--line);
+    background: var(--ink-2);
     color: var(--mute);
     font-size: 30px;
     line-height: 0.9;

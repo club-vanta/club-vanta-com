@@ -46,7 +46,8 @@ export function formatNextDate(iso: string): string {
 
 export function formatPastDate(iso: string): string {
   const p = parts(iso, { month: "short", year: "numeric" });
-  return `${p.month.toLowerCase()} ${p.year}`;
+  // es-AR writes "sept"; the site uses three letters for every month.
+  return `${p.month.toLowerCase().slice(0, 3)} ${p.year}`;
 }
 
 export function tapeNames(alters: PublicAlter[]): string[] {
