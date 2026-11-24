@@ -133,3 +133,8 @@ Registro de lo que se decidió para club-vanta.com, en orden. Cada entrada dice 
 - **Se siguió el runbook de `infra/README.md` tal cual:** secrets en GitHub, Worker vacío con `tofu apply -target`, `npm run deploy`, `tofu apply` para los dos dominios. Funcionó sin importar nada ni tocar el panel.
 - **`ignore_changes = [tags]` en `cloudflare_worker.site`.** Cada `wrangler deploy` agrega el tag `cf:service=club-vanta-com`, y sin esto `tofu plan` mostraba un cambio después de cada deploy. Se probó: deploy, plan con diferencia; con el `ignore_changes`, plan sin cambios.
 - **Verificado en producción:** `www` redirige con 301 a apex (también en `/reglas`), la home y `/reglas` dan 200, una ruta inexistente da 404, y la home muestra los alters reales sin ningún campo privado. Lighthouse mobile sobre el sitio publicado: accesibilidad, buenas prácticas y SEO en 100 en las dos páginas; CLS de 0,04 en `/reglas` por el cambio de fuente, ya aceptado arriba.
+
+### Barra del hero de borde a borde (2026-11-24)
+
+- **En escritorio, la barra papel del hero ("Alters para la comunidad de mazmo...") ocupa todo el ancho**, también sobre el riel de "VANTA", en lugar de arrancar donde empieza el título como en el mock. Motivo: pedido después de verla publicada; cortada dejaba asomar el muro entre el riel y la barra. El texto sigue alineado con el título.
+
