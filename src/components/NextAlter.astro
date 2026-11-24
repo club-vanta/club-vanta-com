@@ -13,7 +13,7 @@ const TELEGRAM = "https://t.me/+0H-a1v8KRDYzMDMx";
 
 <section id="proximo" class="next" aria-labelledby="proximo-title">
   <div class="copy">
-    <p class="kicker">PRÓXIMO ALTER</p>
+    <p class="kicker cond">PRÓXIMO ALTER</p>
     {next ? (
       <>
         <h2 id="proximo-title" class="cond">
@@ -31,7 +31,7 @@ const TELEGRAM = "https://t.me/+0H-a1v8KRDYzMDMx";
       </>
     ) : (
       <>
-        <h2 id="proximo-title" class="cond">
+        <h2 id="proximo-title" class="none">
           Todavía no hay fecha
         </h2>
         <p class="text">
@@ -65,9 +65,9 @@ const TELEGRAM = "https://t.me/+0H-a1v8KRDYzMDMx";
   .kicker {
     margin: 0;
     color: var(--red);
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
+    font-size: clamp(1.75rem, 1.4rem + 1.1vw, 3rem);
+    line-height: 1;
+    letter-spacing: 0.04em;
   }
 
   h2 {
@@ -75,6 +75,15 @@ const TELEGRAM = "https://t.me/+0H-a1v8KRDYzMDMx";
     font-size: clamp(64px, 8.6vw, 110px);
     line-height: 0.82;
     overflow-wrap: break-word;
+  }
+
+  /* Without a date the heading stays quiet: the section still says what it
+     is through the kicker, and the missing date is not the news. */
+  h2.none {
+    margin: var(--space-16) 0 0;
+    font-size: var(--text-intro);
+    font-weight: 700;
+    line-height: 1.25;
   }
 
   .when {
@@ -86,7 +95,7 @@ const TELEGRAM = "https://t.me/+0H-a1v8KRDYzMDMx";
   .text {
     max-width: 40ch;
     color: var(--mute);
-    font-size: 17px;
+    font-size: var(--text-body);
     line-height: 1.5;
   }
 
@@ -115,14 +124,16 @@ const TELEGRAM = "https://t.me/+0H-a1v8KRDYzMDMx";
       display: contents;
     }
 
-    .kicker {
-      font-size: var(--space-12);
-    }
-
     h2 {
       margin: 10px 0 var(--space-12);
       font-size: 58px;
       line-height: 0.85;
+    }
+
+    h2.none {
+      margin: var(--space-12) 0 0;
+      font-size: var(--text-intro);
+      line-height: 1.25;
     }
 
     .when {
@@ -142,7 +153,6 @@ const TELEGRAM = "https://t.me/+0H-a1v8KRDYzMDMx";
     .text {
       max-width: none;
       margin: var(--space-12) 0 0;
-      font-size: 16px;
       line-height: 1.45;
     }
 
