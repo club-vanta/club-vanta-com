@@ -26,7 +26,12 @@
           <b class="cond">Perfil en mazmo</b>
           <small>Sin perfil no se puede entrar.</small>
         </div>
-        <span class="box" aria-hidden="true"></span>
+        <label class="box">
+          <input type="checkbox" aria-label="Perfil en mazmo" />
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 13.5 9 19 21 4.5" />
+          </svg>
+        </label>
       </li>
       <li>
         <span class="n gothic" aria-hidden="true">
@@ -36,7 +41,12 @@
           <b class="cond">Anotate en el post</b>
           <small>¿No podés exponerte? Lista discreta, por privado.</small>
         </div>
-        <span class="box" aria-hidden="true"></span>
+        <label class="box">
+          <input type="checkbox" aria-label="Anotate en el post" />
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 13.5 9 19 21 4.5" />
+          </svg>
+        </label>
       </li>
       <li>
         <span class="n gothic" aria-hidden="true">
@@ -51,7 +61,12 @@
             </a>
           </small>
         </div>
-        <span class="box" aria-hidden="true"></span>
+        <label class="box">
+          <input type="checkbox" aria-label="Leé las reglas" />
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 13.5 9 19 21 4.5" />
+          </svg>
+        </label>
       </li>
     </ol>
   </div>
@@ -173,6 +188,60 @@
     width: 34px;
     height: 34px;
     border: 2px solid var(--ink);
+  }
+
+  /* A real checkbox drawn as the carnet's square. No state is saved: it is
+     only the pleasure of ticking it. */
+  .box {
+    position: relative;
+    cursor: pointer;
+  }
+
+  /* The input covers the box and some margin around it, so the tap target
+     is bigger than the drawn square on the phone. */
+  .box input {
+    position: absolute;
+    inset: -10px;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .box:has(input:focus-visible) {
+    outline: 2px solid var(--ink);
+    outline-offset: 4px;
+  }
+
+  /* The tick, in red like a pen stroke, overflows the square a bit. */
+  .box svg {
+    position: absolute;
+    left: 10%;
+    bottom: 15%;
+    width: 120%;
+    height: 120%;
+    fill: none;
+    stroke: var(--red);
+    stroke-width: 3.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(0.4) rotate(-12deg);
+    transform-origin: 30% 80%;
+    transition:
+      opacity 160ms var(--ease-out),
+      transform 360ms var(--ease-out);
+  }
+
+  .box input:checked + svg {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .box svg {
+      transition: none;
+    }
   }
 
   /* Same as the label above: large bold text keeps the red readable. */

@@ -1,21 +1,20 @@
 import { expect, test, type Page } from "@playwright/test";
-import { NEXT, PAST } from "./fixtures.mjs";
+import { NEXT } from "./fixtures.mjs";
 import { collectErrors, expectNoSeriousA11y, setScenario } from "./helpers";
 
 const TELEGRAM = "https://t.me/+0H-a1v8KRDYzMDMx";
-const NO_DATE_TEXT =
-  "Hacemos un alter cada uno o dos meses y lo publicamos en mazmo unas tres semanas antes.";
+// Removed copy: the no-date block is only the heading and the button.
+const REMOVED_TEXT = "Hacemos un alter";
 
 const isMobile = (name: string) => name === "mobile";
 
-async function expectNoDate(page: Page, lastName: string, project: string) {
+async function expectNoDate(page: Page, project: string) {
   const next = page.locator("#proximo");
   await expect(next.getByRole("heading", { level: 2 })).toHaveText(
     "Todavía no hay fecha",
   );
-  await expect(next).toContainText(
-    `${NO_DATE_TEXT} El último fue ${lastName}.`,
-  );
+  await expect(next).not.toContainText(REMOVED_TEXT);
+  await expect(next).not.toContainText("El último fue");
   await expect(
     next.getByRole("link", { name: "Anotarme en mazmo" }),
   ).toHaveCount(0);
@@ -97,7 +96,7 @@ test.describe("próximo alter", () => {
 
     test("muestra que no hay fecha", async ({ page }, testInfo) => {
       await page.goto("/");
-      await expectNoDate(page, PAST[0].short_name, testInfo.project.name);
+      await expectNoDate(page, testInfo.project.name);
     });
 
     test("sin violaciones serias de accesibilidad", async ({ page }) => {
@@ -117,7 +116,7 @@ test.describe("próximo alter", () => {
     await expect(next.getByRole("heading", { level: 2 })).toHaveText(
       "Todavía no hay fecha",
     );
-    await expect(next).toContainText(NO_DATE_TEXT);
+    await expect(next).not.toContainText(REMOVED_TEXT);
     await expect(next).not.toContainText("El último fue");
     await expect(page.getByTestId("wall")).toBeAttached();
     await expect(page.getByTestId("wall").locator("img")).toHaveCount(0);
@@ -130,7 +129,7 @@ test.describe("próximo alter", () => {
   }, testInfo) => {
     await setScenario(request, "past-next");
     await page.goto("/");
-    await expectNoDate(page, NEXT.short_name, testInfo.project.name);
+    await expectNoDate(page, testInfo.project.name);
   });
 
   test("down: usa la copia en caché", async ({ browser, page, request }) => {

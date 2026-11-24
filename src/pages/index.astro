@@ -38,7 +38,7 @@ Astro.response.headers.set("Cache-Control", "public, max-age=60");
 >
   <main>
     <Hero covers={covers} />
-    <NextAlter next={next} last={past[0] ?? null} />
+    <NextAlter next={next} />
     <WhatIs />
     <Carnet />
     {past.length > 0 && (

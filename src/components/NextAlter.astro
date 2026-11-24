@@ -4,10 +4,9 @@ import { formatNextDate, type PublicAlter } from "../lib/alters";
 
 interface Props {
   next: PublicAlter | null;
-  last: PublicAlter | null;
 }
 
-const { next, last } = Astro.props;
+const { next } = Astro.props;
 const TELEGRAM = "https://t.me/+0H-a1v8KRDYzMDMx";
 ---
 
@@ -34,11 +33,6 @@ const TELEGRAM = "https://t.me/+0H-a1v8KRDYzMDMx";
         <h2 id="proximo-title" class="none">
           Todavía no hay fecha
         </h2>
-        <p class="text">
-          Hacemos un alter cada uno o dos meses y lo publicamos en mazmo unas
-          tres semanas antes.
-          {last && <>El último fue {last.short_name}.</>}
-        </p>
         <a class="btn" href={TELEGRAM}>
           Enterate primero en Telegram
         </a>

@@ -73,6 +73,24 @@ test.describe("resto de la home", () => {
       await expect(carnet).not.toContainText("Club social");
     });
 
+    test("carnet: los casilleros se tildan y destildan", async ({ page }) => {
+      await page.goto("/");
+      const carnet = page.getByTestId("carnet");
+      const boxes = carnet.getByRole("checkbox");
+      await expect(boxes).toHaveCount(3);
+      const first = carnet.getByRole("checkbox", { name: "Perfil en mazmo" });
+      await expect(first).not.toBeChecked();
+      await carnet.locator(".box").first().click();
+      await expect(first).toBeChecked();
+      await expect(carnet.locator(".box svg").first()).toHaveCSS(
+        "opacity",
+        "1",
+      );
+      await carnet.locator(".box").first().click();
+      await expect(first).not.toBeChecked();
+      await expect(boxes.nth(1)).not.toBeChecked();
+    });
+
     test("cinta: todos los nombres, y quieta con movimiento reducido", async ({
       page,
     }) => {
