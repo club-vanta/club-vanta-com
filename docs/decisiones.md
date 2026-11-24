@@ -124,6 +124,10 @@ Registro de lo que se decidió para club-vanta.com, en orden. Cada entrada dice 
 - **Privacidad en el límite del backend.** `getAlters` copia solo `short_name`, `title`, `date`, `mazmo_url`, `cover_url` y `excerpt`, y acepta únicamente URLs `https://`. La copia de la caché pasa por el mismo filtro. Las URLs `http://127.0.0.1` y `http://localhost` solo valen si la API configurada es local (el backend falso del e2e).
 - **Portada rota.** El logo queda detrás de la portada: si la portada falla, la máscara se ve igual que sin portada.
 
+### Sin fecha, logo liso (2026-11-24)
+
+- **Sin próximo alter, la máscara muestra el logo liso** y no la portada del último alter en gris, como decía el diseño. Motivo: visto en el celular con el sitio publicado, la portada de Discreet es casi toda negra y la silueta del logo desaparecía sobre el fondo negro. Esa portada ya aparece en "Alters pasados". Con fecha, la máscara sigue mostrando la portada del próximo alter.
+
 ### Primer despliegue (2026-11-24)
 
 - **Se siguió el runbook de `infra/README.md` tal cual:** secrets en GitHub, Worker vacío con `tofu apply -target`, `npm run deploy`, `tofu apply` para los dos dominios. Funcionó sin importar nada ni tocar el panel.

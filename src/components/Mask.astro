@@ -1,14 +1,13 @@
 ---
 interface Props {
   coverUrl: string | null;
-  muted: boolean;
 }
 
-const { coverUrl, muted } = Astro.props;
+const { coverUrl } = Astro.props;
 ---
 
 {coverUrl ? (
-  <div class:list={["mask", { muted }]} aria-hidden="true">
+  <div class="mask" aria-hidden="true">
     <img class="fallback" src="/vanta.svg" alt="" />
     <img
       class="cover"
@@ -68,10 +67,6 @@ const { coverUrl, muted } = Astro.props;
   .mask:not(:has(.cover)) {
     -webkit-mask-image: none;
     mask-image: none;
-  }
-
-  .muted img {
-    filter: grayscale(1);
   }
 
   /* Without a cover there is nothing to see through it: just the logo. */

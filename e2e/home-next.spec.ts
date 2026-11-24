@@ -23,6 +23,10 @@ async function expectNoDate(page: Page, lastName: string, project: string) {
     name: "Enterate primero en Telegram",
   });
   await expect(telegram).toHaveAttribute("href", TELEGRAM);
+  // The plain logo, never the last cover seen through it.
+  await expect(next.locator(".mask img")).toHaveCount(1);
+  await expect(next.locator(".mask img")).toHaveAttribute("src", "/vanta.svg");
+  await expect(next.locator(".mask")).toHaveCSS("mask-image", "none");
   if (isMobile(project)) {
     await expect(page.getByTestId("sticky-next")).toHaveCount(0);
   }

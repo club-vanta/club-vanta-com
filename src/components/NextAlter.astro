@@ -45,10 +45,9 @@ const TELEGRAM = "https://t.me/+0H-a1v8KRDYzMDMx";
       </>
     )}
   </div>
-  <Mask
-    coverUrl={next ? next.cover_url : (last?.cover_url ?? null)}
-    muted={!next}
-  />
+  {/* Without a date, the plain logo: the last cover is often dark and hides
+      the silhouette, and it already shows up in the past alters. */}
+  <Mask coverUrl={next?.cover_url ?? null} />
 </section>
 
 <style>
