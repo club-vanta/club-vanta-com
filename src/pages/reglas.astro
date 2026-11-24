@@ -1,0 +1,428 @@
+---
+import Base from "../layouts/Base.astro";
+import RulesBlock from "../components/RulesBlock.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Base
+  title="Reglas de convivencia · Club Vanta"
+  description="Reglas de convivencia de los alters de Club Vanta, versión 0.2. Leerlas es obligatorio para entrar."
+>
+  <div class="page">
+    <div class="rail" data-testid="rail" aria-hidden="true">
+      <span class="gothic">VANTA</span>
+    </div>
+    <main>
+      <a class="back" href="/">
+        ← club-vanta.com
+      </a>
+      <div class="head">
+        <h1 class="cond">
+          Reglas de <em>convivencia</em>
+        </h1>
+        <div class="ver" data-testid="version">
+          <b class="gothic">v0.2</b>versión actual
+        </div>
+      </div>
+      <div class="must cond" data-testid="must">
+        Leer este documento es obligatorio para entrar al alter.
+      </div>
+      <p class="intro">
+        Club Vanta propone un espacio cortés. Por lo tanto, esta es la lista de
+        reglas para participar del evento.
+      </p>
+
+      <RulesBlock number="01" title="Convivencia">
+        <ol class="rules">
+          <li class="key">
+            <span>Respetar el espacio personal de todos.</span>
+          </li>
+          <li class="key">
+            <span>
+              No atosigar ni ser insistente en su presencia cuando se pide
+              espacio.
+            </span>
+          </li>
+          <li>
+            <span>No están permitidas las formas violentas.</span>
+          </li>
+          <li>
+            <span>
+              No se permitirá la participación de gente que no tenga un perfil
+              en mazmo.net.
+            </span>
+          </li>
+          <li class="key">
+            <span>
+              No investigar ni revelar información privada de los asistentes al
+              evento en publicaciones de Club Vanta (doxeo).
+            </span>
+          </li>
+          <li>
+            <span>
+              Uno debe saber sus límites y condiciones para relacionarse con los
+              demás y, por lo tanto, tener las herramientas apropiadas para
+              tener un trato cordial y respetuoso.
+            </span>
+          </li>
+          <li>
+            <span>Debe saber decir que no.</span>
+          </li>
+          <li>
+            <span>Debe saber cuáles son sus límites.</span>
+          </li>
+          <li>
+            <span>
+              Debe saber qué quiere, qué desea, y tener una idea de las
+              consecuencias de sus acciones.
+            </span>
+          </li>
+          <li>
+            <span>
+              Debe entender que es un ambiente BDSMK y, por lo tanto, estar
+              medianamente enterado de cuáles son sus características y, con
+              ello, de los límites y riesgos que se le presentan.
+            </span>
+          </li>
+        </ol>
+      </RulesBlock>
+
+      <RulesBlock number="02" title="Compromiso">
+        <p class="note">
+          El alter no se puede hacer responsable de las decisiones personales de
+          los individuos. Seguramente podremos aconsejar, pero usted es
+          responsable de lo que haga o deje hacer.
+        </p>
+        <p class="note">
+          Recuerde que al anotarse al evento genera un compromiso que asumimos
+          recíproco: de los organizadores, al gestionar el espacio y prepararlo
+          para recibirlos, así como de los participantes, el de asistir.
+        </p>
+        <div class="penalty" data-testid="penalty">
+          <div class="n gothic">2</div>
+          <p>
+            La no asistencia y la rotura del compromiso se van a tener en
+            cuenta, y aquellos que acumulen <b>2 anotaciones en falso</b> van a
+            ser penalizados con la imposibilidad de anotarse durante{" "}
+            <b>1 fecha</b>.
+          </p>
+        </div>
+      </RulesBlock>
+
+      <RulesBlock number="03" title="En el lugar">
+        <ol class="rules">
+          <li class="key">
+            <span>No se permiten prácticas.</span>
+          </li>
+          <li>
+            <span>No se permiten acciones de violencia física.</span>
+          </li>
+          <li>
+            <span>No se permite tener sexo en el baño.</span>
+          </li>
+          <li>
+            <span>No se permite la desnudez completa.</span>
+          </li>
+          <li>
+            <span>No se permite entrar bebida y comida ajena al lugar.</span>
+          </li>
+          <li>
+            <span>Fumar solo en los espacios asignados a tal efecto.</span>
+          </li>
+          <li class="key">
+            <span>
+              Está terminantemente prohibido sacar fotos dentro del espacio y en
+              la vereda del lugar. Un espacio será asignado para aquellos que
+              quieran sacar fotos <b>claramente consensuadas</b> entre los
+              participantes.
+            </span>
+          </li>
+          <li>
+            <span>
+              La organización no se hará responsable por extravío de elementos
+              personales. Igualmente, contaremos con una caja de objetos
+              perdidos.
+            </span>
+          </li>
+        </ol>
+      </RulesBlock>
+
+      <div class="closing">
+        <p>
+          Por supuesto, los organizadores estamos disponibles y dispuestos a
+          cualquier consulta. Pero solicitamos a todos que entiendan que la
+          resolución va a ser atenta y expedita. Los organizadores debemos estar
+          atentos al evento en general, entonces es limitado nuestro tiempo para
+          las cuestiones particulares.
+        </p>
+        <p>
+          Ante todo se pregona un <b>trato cordial</b>. Podemos decir que la
+          comunidad siempre tiene una intención integradora y accesible y, por
+          lo tanto, instamos a todos a cuidar esa virtud comunitaria.
+          <br />
+          <br />
+          La organización se reserva el derecho de admisión y permanencia.
+          <br />
+          <br />
+          <b>Esta es la versión 0.2 de las reglas de convivencia.</b> Cualquiera
+          que encuentre algo que pueda aportar será escuchado.
+        </p>
+      </div>
+    </main>
+  </div>
+  <Footer />
+</Base>
+
+<style>
+  .page {
+    display: grid;
+    grid-template-columns: var(--rail) minmax(0, 1fr);
+  }
+
+  .page .rail {
+    position: relative;
+    border-right: 1px solid var(--line);
+  }
+
+  .page .rail span {
+    position: sticky;
+    top: var(--space-24);
+    display: block;
+    margin: 0 auto;
+    padding: var(--space-24) 0;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 150px;
+    line-height: 0.8;
+    color: var(--red);
+  }
+
+  .page main {
+    max-width: 1100px;
+    padding: 50px 60px 70px;
+  }
+
+  .back {
+    color: var(--mute);
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+  }
+
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 30px;
+    margin: 30px 0 10px;
+  }
+
+  .head h1 {
+    margin: 0;
+    font-size: 130px;
+    line-height: 0.8;
+  }
+
+  .head h1 em {
+    display: block;
+    font-style: normal;
+    color: var(--red);
+  }
+
+  .ver {
+    border: 2px solid var(--paper);
+    padding: 10px 14px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .ver b {
+    display: block;
+    font-size: 44px;
+    line-height: 0.9;
+  }
+
+  .must {
+    margin: 30px 0 50px;
+    background: var(--red);
+    color: var(--ink);
+    padding: 18px 24px;
+    font-size: 30px;
+    line-height: 1;
+  }
+
+  .intro {
+    max-width: 44ch;
+    margin: 0 0 50px;
+    font-size: 22px;
+    line-height: 1.4;
+  }
+
+  .rules {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: r;
+  }
+
+  .rules li {
+    counter-increment: r;
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 18px;
+    line-height: 1.45;
+    color: var(--paper-soft);
+  }
+
+  .rules li::before {
+    content: counter(r, decimal-leading-zero);
+    font-family: var(--font-gothic);
+    font-size: 38px;
+    line-height: 0.9;
+    color: var(--num);
+  }
+
+  .rules li.key {
+    color: var(--paper);
+    font-weight: 700;
+  }
+
+  .rules li.key::before {
+    color: var(--red);
+  }
+
+  .note {
+    max-width: 60ch;
+    margin: 0 0 14px;
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--paper-soft);
+  }
+
+  .penalty {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-top: 10px;
+    padding: 18px 22px;
+    background: var(--ink-3);
+  }
+
+  .penalty .n {
+    font-size: 80px;
+    line-height: 0.8;
+    color: var(--red);
+  }
+
+  .penalty p {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.4;
+  }
+
+  .closing {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    padding-top: 30px;
+    border-top: 2px solid var(--paper);
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--paper-soft);
+  }
+
+  .closing p {
+    margin: 0;
+  }
+
+  .closing b {
+    color: var(--paper);
+  }
+
+  @media (max-width: 899.98px) {
+    .page {
+      display: block;
+    }
+
+    .page .rail {
+      height: 110px;
+      overflow: hidden;
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+      text-align: center;
+    }
+
+    .page .rail span {
+      position: static;
+      writing-mode: horizontal-tb;
+      transform: none;
+      padding: var(--space-8) 0 0;
+      font-size: 150px;
+      line-height: 0.78;
+    }
+
+    .page main {
+      padding: var(--space-24) var(--space-16) var(--space-48);
+    }
+
+    .head {
+      gap: var(--space-16);
+      margin: var(--space-24) 0 var(--space-8);
+    }
+
+    .head h1 {
+      font-size: 74px;
+    }
+
+    .ver b {
+      font-size: 36px;
+    }
+
+    .must {
+      margin: var(--space-24) 0 var(--space-32);
+      padding: var(--space-16);
+      font-size: 24px;
+      line-height: 1.05;
+    }
+
+    .intro {
+      margin-bottom: var(--space-32);
+      font-size: 19px;
+    }
+
+    .rules li {
+      grid-template-columns: 48px minmax(0, 1fr);
+      gap: var(--space-8);
+      font-size: 16px;
+    }
+
+    .rules li::before {
+      font-size: 32px;
+    }
+
+    .note {
+      font-size: 16px;
+    }
+
+    .penalty {
+      gap: var(--space-16);
+      padding: var(--space-16);
+    }
+
+    .penalty .n {
+      font-size: 64px;
+    }
+
+    .closing {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-16);
+      font-size: 16px;
+    }
+  }
+</style>

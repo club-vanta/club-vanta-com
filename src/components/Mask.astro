@@ -1,0 +1,88 @@
+---
+interface Props {
+  coverUrl: string | null;
+}
+
+const { coverUrl } = Astro.props;
+---
+
+{coverUrl ? (
+  <div class="mask" aria-hidden="true">
+    <img class="fallback" src="/vanta.svg" alt="" />
+    <img
+      class="cover"
+      src={coverUrl}
+      alt=""
+      referrerpolicy="no-referrer"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+) : (
+  <div class="mask logo" aria-hidden="true">
+    <img src="/vanta.svg" alt="" />
+  </div>
+)}
+
+<style>
+  /* The cover seen through the logo. vanta-mask.svg is white on transparent,
+     so it works as an alpha mask. */
+  .mask {
+    position: relative;
+    width: 460px;
+    max-width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    -webkit-mask-image: url(/vanta-mask.svg);
+    mask-image: url(/vanta-mask.svg);
+    -webkit-mask-size: cover;
+    mask-size: cover;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+  }
+
+  .mask img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+    object-position: 50% 0;
+  }
+
+  /* The logo sits behind the cover. If the cover fails, the error script
+     removes it and the mask falls back to the same look as having no cover. */
+  .mask .fallback {
+    position: absolute;
+    inset: 0;
+    object-fit: contain;
+  }
+
+  .mask .cover {
+    position: relative;
+  }
+
+  .mask:not(:has(.cover)) {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  /* Without a cover there is nothing to see through it: just the logo. */
+  .logo {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .logo img {
+    object-fit: contain;
+  }
+
+  @media (max-width: 899.98px) {
+    .mask {
+      width: 260px;
+      margin: 26px auto 0;
+    }
+  }
+</style>

@@ -1,0 +1,24 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "club-vanta-com",
+  "main": "@astrojs/cloudflare/entrypoints/server",
+  "compatibility_date": "2026-11-23",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": false,
+  "preview_urls": false,
+  "observability": { "enabled": true },
+  "vars": {
+    "ALTERS_API_URL": "https://api-alter-tracker.club-vanta.com",
+    "ALTERS_FRESH_SECONDS": "900",
+  },
+  "env": {
+    // Only for e2e tests: build with CLOUDFLARE_ENV=e2e to talk to the fake
+    // backend (e2e/fake-backend.mjs) and never serve a fresh copy from cache.
+    "e2e": {
+      "vars": {
+        "ALTERS_API_URL": "http://127.0.0.1:4599",
+        "ALTERS_FRESH_SECONDS": "0",
+      },
+    },
+  },
+}

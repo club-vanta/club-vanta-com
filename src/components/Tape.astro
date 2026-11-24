@@ -1,0 +1,89 @@
+---
+interface Props {
+  names: string[];
+}
+
+const { names } = Astro.props;
+
+// One copy of the list has to be wider than the screen, or the loop shows a
+// gap; repeat short lists. It also needs an even length, so the second copy
+// starts on red like the first and the jump back to 0 is invisible.
+const MIN_PER_COPY = 8;
+const copy = [...names];
+while (names.length > 0 && (copy.length < MIN_PER_COPY || copy.length % 2)) {
+  copy.push(...names);
+}
+const track = [...copy, ...copy];
+---
+
+<div class="codes" data-testid="tape" aria-hidden="true">
+  <div class="tape cond">
+    <div class="track">
+      {track.map((name) => (
+        <span>{name}</span>
+      ))}
+    </div>
+  </div>
+</div>
+
+<style>
+  .codes {
+    padding-top: 50px;
+    background: var(--ink-2);
+  }
+
+  .tape {
+    overflow: hidden;
+    padding: 22px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: var(--ink-2);
+    font-size: 96px;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .track {
+    display: inline-block;
+    animation: tape 30s linear infinite;
+  }
+
+  span {
+    margin-right: 36px;
+  }
+
+  span:nth-child(odd) {
+    color: var(--red);
+  }
+
+  @keyframes tape {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .track {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 899.98px) {
+    .codes {
+      padding-top: 0;
+    }
+
+    .tape {
+      padding: 14px 0;
+      font-size: 52px;
+    }
+
+    .track {
+      animation-duration: 22s;
+    }
+
+    span {
+      margin-right: var(--space-24);
+    }
+  }
+</style>

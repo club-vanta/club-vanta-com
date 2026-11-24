@@ -1,0 +1,45 @@
+# language: system tells pre-commit to use the system's Node/npm instead of
+# creating an isolated nodeenv. Required because the apt nodeenv is broken.
+# Mirrors the same approach used in alter-tracker-backend.
+
+default_install_hook_types: [pre-commit, pre-push]
+
+repos:
+  - repo: local
+    hooks:
+      - id: typecheck
+        name: Astro type check
+        entry: npm run typecheck
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: prettier
+        name: Prettier format check
+        entry: npx prettier --check .
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: eslint
+        name: ESLint
+        entry: npx eslint .
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: build
+        name: Build
+        entry: npm run build
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-push]
+
+      - id: vitest
+        name: Vitest unit tests
+        entry: npm run test:run
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-push]

@@ -1,0 +1,187 @@
+---
+import { formatPastDate, type PublicAlter } from "../lib/alters";
+
+interface Props {
+  past: PublicAlter[];
+}
+
+const { past } = Astro.props;
+---
+
+<section id="pasados" class="archive" aria-labelledby="pasados-title">
+  <h2 id="pasados-title" class="visually-hidden">
+    Alters pasados
+  </h2>
+  <ul class="grid" data-testid="past-grid">
+    {past.map((alter) => (
+      <li class="tile" data-testid="past-tile">
+        <a href={alter.mazmo_url}>
+          <span class="cover">
+            {/* The name sits behind the cover: it is what shows when there is
+                no cover or the cover fails to load (Base.astro removes broken images). */}
+            <span class="blank cond" data-testid="no-cover" aria-hidden="true">
+              {alter.short_name}
+            </span>
+            {alter.cover_url && (
+              <img
+                src={alter.cover_url}
+                alt={`Flyer de ${alter.short_name}`}
+                referrerpolicy="no-referrer"
+                loading="lazy"
+                decoding="async"
+              />
+            )}
+          </span>
+          <b class="cond">{alter.short_name}</b>
+          <small>{formatPastDate(alter.date)}</small>
+        </a>
+      </li>
+    ))}
+  </ul>
+  {past.length > 2 && (
+    <p class="hint" aria-hidden="true">
+      ← deslizá para ver más
+    </p>
+  )}
+</section>
+
+<style>
+  .archive {
+    padding: 50px 40px 70px var(--content-start);
+    background: var(--ink-2);
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    display: block;
+    color: var(--paper);
+    text-decoration: none;
+  }
+
+  .cover {
+    position: relative;
+    display: block;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: var(--ink-2);
+  }
+
+  img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+    filter: grayscale(1) brightness(0.75);
+    transition: filter 0.35s var(--ease-out);
+  }
+
+  a:hover img,
+  a:focus-visible img {
+    filter: none;
+  }
+
+  /* Without a cover the tile keeps its shape and shows the name. */
+  .blank {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    padding: var(--space-12);
+    border: 1px solid var(--line);
+    background: var(--ink-2);
+    color: var(--mute);
+    font-size: 30px;
+    line-height: 0.9;
+    overflow-wrap: break-word;
+  }
+
+  b {
+    display: block;
+    margin-top: 10px;
+    font-size: 26px;
+    line-height: 0.9;
+  }
+
+  small {
+    color: var(--mute);
+    font-size: 13px;
+  }
+
+  .hint {
+    display: none;
+  }
+
+  @media (max-width: 1099.98px) {
+    .grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  /* A horizontal carousel in color: there is no hover on a phone. */
+  @media (max-width: 899.98px) {
+    .archive {
+      padding: var(--space-24) 0 44px var(--space-16);
+    }
+
+    .grid {
+      display: flex;
+      gap: 10px;
+      padding-right: var(--space-16);
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+
+    .tile {
+      flex: 0 0 150px;
+      scroll-snap-align: start;
+    }
+
+    img {
+      filter: none;
+    }
+
+    .blank {
+      font-size: 24px;
+    }
+
+    b {
+      margin-top: var(--space-8);
+      font-size: 22px;
+    }
+
+    small {
+      font-size: var(--space-12);
+    }
+  }
+
+  /* Three tiles or more overflow a phone; wider screens show them all. */
+  @media (max-width: 599.98px) {
+    .hint {
+      display: block;
+      margin: var(--space-12) 0 0;
+      color: var(--mute);
+      font-size: var(--space-12);
+    }
+  }
+</style>

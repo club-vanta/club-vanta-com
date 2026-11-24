@@ -1,0 +1,13 @@
+dist/
+.astro/
+.wrangler/
+node_modules/
+package-lock.json
+test-results/
+playwright-report/
+infra/.terraform/
+.superpowers/
+.playwright-mcp/
+# Docs with fenced code blocks that Prettier would reformat.
+docs/
+src/api/types.ts

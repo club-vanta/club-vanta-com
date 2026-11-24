@@ -1,0 +1,53 @@
+---
+import { env } from "cloudflare:workers";
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import NextAlter from "../components/NextAlter.astro";
+import StickyNext from "../components/StickyNext.astro";
+import WhatIs from "../components/WhatIs.astro";
+import Carnet from "../components/Carnet.astro";
+import Tape from "../components/Tape.astro";
+import PastAlters from "../components/PastAlters.astro";
+import Footer from "../components/Footer.astro";
+import { selectAlters, tapeNames } from "../lib/alters";
+import { getAlters } from "../lib/get-alters";
+import { cacheSnapshotStore } from "../lib/snapshot-cache";
+
+const now = new Date();
+const { alters } = await getAlters({
+  fetchImpl: fetch,
+  store: cacheSnapshotStore(caches.default),
+  apiUrl: env.ALTERS_API_URL,
+  freshSeconds: Number(env.ALTERS_FRESH_SECONDS),
+  timeoutMs: 2500,
+  now,
+});
+const { next, past } = selectAlters(alters, now);
+const covers = [
+  ...new Set(
+    [next, ...past].flatMap((a) => (a?.cover_url ? [a.cover_url] : [])),
+  ),
+];
+
+Astro.response.headers.set("Cache-Control", "public, max-age=60");
+---
+
+<Base
+  title="Club Vanta · Alters en San Telmo"
+  description="Club social sin fines de lucro. Organizamos alters para la comunidad de mazmo: los jueves a las 20.30, en un bar de San Telmo, gratis."
+>
+  <main>
+    <Hero covers={covers} />
+    <NextAlter next={next} last={past[0] ?? null} />
+    <WhatIs />
+    <Carnet />
+    {past.length > 0 && (
+      <>
+        <Tape names={tapeNames(alters)} />
+        <PastAlters past={past} />
+      </>
+    )}
+  </main>
+  <Footer />
+  {next && <StickyNext next={next} />}
+</Base>

@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    name: Typecheck, lint, format, build, unit tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Build
+        run: npm run build
+
+      # Every Cloudflare resource is declared in OpenTofu. The adapter can add
+      # bindings by itself (sessions KV, Images), so only ASSETS and the two
+      # vars may appear.
+      - name: Check Worker bindings
+        run: |
+          npx wrangler deploy --dry-run 2>&1 | tee dry-run.txt
+          if grep -E '^env\.' dry-run.txt | grep -vE '^env\.(ASSETS|ALTERS_API_URL|ALTERS_FRESH_SECONDS)[ ]'; then
+            echo "Unexpected binding in the Worker" >&2
+            exit 1
+          fi
+          grep -q '^env\.ASSETS' dry-run.txt
+
+      - name: Unit tests
+        run: npm run test:run
+
+  e2e:
+    name: E2E tests (Playwright against astro preview and a fake backend)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      # @playwright/test is pinned to the version of nixpkgs#playwright-driver,
+      # so CI and devenv run the same Chromium build.
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: E2E tests
+        run: npm run test:e2e
+
+      - name: Upload Playwright traces
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces
+          path: test-results/
+          retention-days: 7
