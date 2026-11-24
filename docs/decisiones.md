@@ -138,3 +138,8 @@ Registro de lo que se decidió para club-vanta.com, en orden. Cada entrada dice 
 
 - **En escritorio, la barra papel del hero ("Alters para la comunidad de mazmo...") ocupa todo el ancho**, también sobre el riel de "VANTA", en lugar de arrancar donde empieza el título como en el mock. Motivo: pedido después de verla publicada; cortada dejaba asomar el muro entre el riel y la barra. El texto sigue alineado con el título.
 
+### Tamaños de texto (2026-11-24)
+
+- **Texto corrido en `rem` con `clamp()`**, con cinco tokens en `tokens.css` (`--text-label`, `--text-small`, `--text-body`, `--text-lead`, `--text-intro`). Motivo: en pantallas de 1440p el texto de 17 px se veía muy chico. `rem` respeta el tamaño de letra que la persona configura en el navegador; la parte en `vw` lo agranda en pantallas anchas. En el celular queda igual que antes (16 px el cuerpo) y llega a 22 px a 2560 px de ancho. Los títulos grandes, el carnet y la cinta no cambian: son piezas de diseño con tamaños fijos.
+- **"PRÓXIMO ALTER" pasa de etiqueta chica a título rojo condensado** (28 a 48 px), y **sin fecha, "Todavía no hay fecha" deja de ir enorme**: va en el tamaño de una bajada, en negrita y sin mayúsculas. Motivo: que falte la fecha no es la noticia; el estado normal no tiene que gritar.
+

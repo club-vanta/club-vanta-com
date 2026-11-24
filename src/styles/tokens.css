@@ -34,6 +34,15 @@
   --font-cond: "Sofia Sans Extra Condensed", sans-serif;
   --font-gothic: "League Gothic", sans-serif;
 
+  /* Text sizes. rem so they follow the reader's browser font setting; the
+     vw part grows them on wide screens (1440p and up). Each goes from its
+     phone size at 375 px wide to its maximum at 2560 px. */
+  --text-label: clamp(0.75rem, 0.707rem + 0.183vw, 1rem); /* 12 to 16 px */
+  --text-small: clamp(0.875rem, 0.832rem + 0.183vw, 1.125rem); /* 14 to 18 px */
+  --text-body: clamp(1rem, 0.936rem + 0.275vw, 1.375rem); /* 16 to 22 px */
+  --text-lead: clamp(1rem, 0.914rem + 0.366vw, 1.5rem); /* 16 to 24 px */
+  --text-intro: clamp(1.1875rem, 1.091rem + 0.412vw, 1.75rem); /* 19 to 28 px */
+
   /* Width of the vertical VANTA rail on desktop, and the content start. */
   --rail: 150px;
   --content-start: 190px;

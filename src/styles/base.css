@@ -13,6 +13,7 @@ body {
   background: var(--ink);
   color: var(--paper);
   font-family: var(--font-text);
+  font-size: var(--text-body);
 }
 
 img {
