@@ -21,6 +21,12 @@ resource "cloudflare_worker" "site" {
     enabled          = false
     previews_enabled = false
   }
+
+  # Every `wrangler deploy` adds the tag "cf:service=club-vanta-com". Without
+  # this, each deploy leaves a diff that OpenTofu would try to remove.
+  lifecycle {
+    ignore_changes = [tags]
+  }
 }
 
 # `service` takes the Worker name, which must match `name` in wrangler.jsonc.

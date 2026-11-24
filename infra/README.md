@@ -108,7 +108,7 @@ Orden pensado para no pelearse con Wrangler: OpenTofu crea el Worker vacío prim
    }
    ```
 
-   Hoy el recurso ya fija `observability.enabled = true` y `subdomain.enabled = false`, que es lo que dice `wrangler.jsonc` (`observability.enabled`, `workers_dev: false`, `preview_urls: false`), así que el `ignore_changes` es solo el plan B.
+   Hoy el recurso ya fija `observability.enabled = true` y `subdomain.enabled = false`, que es lo que dice `wrangler.jsonc` (`observability.enabled`, `workers_dev: false`, `preview_urls: false`), y ya ignora `tags`: cada `wrangler deploy` agrega el tag `cf:service=club-vanta-com` (visto en el primer despliegue, 2026-11-24).
 
 6. **Verificar en producción:**
 

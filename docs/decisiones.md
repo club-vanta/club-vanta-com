@@ -123,3 +123,9 @@ Registro de lo que se decidió para club-vanta.com, en orden. Cada entrada dice 
 - **Sin bindings que no estén en OpenTofu.** El adapter de Cloudflare agrega por defecto un KV `SESSION` (sesiones de Astro) y un binding `IMAGES`. El sitio no usa ninguna de las dos cosas, así que `astro.config.mjs` desactiva ambas (`session` con driver en memoria e `imageService: "passthrough"`), y el CI falla si `wrangler deploy --dry-run` lista un binding que no sea `ASSETS` ni las dos variables.
 - **Privacidad en el límite del backend.** `getAlters` copia solo `short_name`, `title`, `date`, `mazmo_url`, `cover_url` y `excerpt`, y acepta únicamente URLs `https://`. La copia de la caché pasa por el mismo filtro. Las URLs `http://127.0.0.1` y `http://localhost` solo valen si la API configurada es local (el backend falso del e2e).
 - **Portada rota.** El logo queda detrás de la portada: si la portada falla, la máscara se ve igual que sin portada.
+
+### Primer despliegue (2026-11-24)
+
+- **Se siguió el runbook de `infra/README.md` tal cual:** secrets en GitHub, Worker vacío con `tofu apply -target`, `npm run deploy`, `tofu apply` para los dos dominios. Funcionó sin importar nada ni tocar el panel.
+- **`ignore_changes = [tags]` en `cloudflare_worker.site`.** Cada `wrangler deploy` agrega el tag `cf:service=club-vanta-com`, y sin esto `tofu plan` mostraba un cambio después de cada deploy. Se probó: deploy, plan con diferencia; con el `ignore_changes`, plan sin cambios.
+- **Verificado en producción:** `www` redirige con 301 a apex (también en `/reglas`), la home y `/reglas` dan 200, una ruta inexistente da 404, y la home muestra los alters reales sin ningún campo privado. Lighthouse mobile sobre el sitio publicado: accesibilidad, buenas prácticas y SEO en 100 en las dos páginas; CLS de 0,04 en `/reglas` por el cambio de fuente, ya aceptado arriba.

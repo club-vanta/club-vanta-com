@@ -1,6 +1,6 @@
 # CLAUDE.md - club-vanta.com
 
-Public website of Club Vanta, served at `club-vanta.com`. The site is built (Astro 6 on Cloudflare Workers) and waits for its first deploy.
+Public website of Club Vanta, served at `club-vanta.com`. The site (Astro 6 on Cloudflare Workers) is live since 2026-11-24. Each push to `main` with green CI deploys it.
 
 ## Rule: keep the context in this repo
 
