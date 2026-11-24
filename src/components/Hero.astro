@@ -118,13 +118,15 @@ const tiles =
     position: absolute;
     right: 0;
     bottom: 0;
-    left: var(--content-start);
+    /* Edge to edge, over the rail too; the text still lines up with the title. */
+    left: 0;
     z-index: 3;
     display: flex;
     justify-content: space-between;
     gap: var(--space-16);
     margin: 0;
-    padding: var(--space-16) 28px;
+    padding: var(--space-16) 28px var(--space-16)
+      calc(var(--content-start) + 28px);
     background: var(--paper);
     color: var(--ink);
     font-weight: 700;
